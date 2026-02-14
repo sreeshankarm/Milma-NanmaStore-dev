@@ -8,17 +8,17 @@ import {
 } from "lucide-react";
 import { useStore } from "../context/store/store";
 import { ComplaintCategory } from "../typesss/typesss";
-import type { ComplaintStatus } from "../typesss/typesss";
+// import type { ComplaintStatus } from "../typesss/typesss";
 
 /* ----------------------------------------
    STATUS BADGE STYLES
 ---------------------------------------- */
-const statusCls: Record<ComplaintStatus, string> = {
-  Open: "bg-amber-500/15 text-amber-500 border border-amber-500/30",
-  "In Progress": "bg-blue-500/10 text-blue-500 border border-blue-500/30",
-  Responded: "bg-emerald-500/10 text-emerald-600 border border-emerald-500/30",
-  Closed: "bg-slate-500/15 text-slate-600 border border-slate-500/30",
-};
+// const statusCls: Record<ComplaintStatus, string> = {
+//   Open: "bg-amber-500/15 text-amber-500 border border-amber-500/30",
+//   "In Progress": "bg-blue-500/10 text-blue-500 border border-blue-500/30",
+//   Responded: "bg-emerald-500/10 text-emerald-600 border border-emerald-500/30",
+//   Closed: "bg-slate-500/15 text-slate-600 border border-slate-500/30",
+// };
 
 /* ----------------------------------------
    DATE FORMATTER

@@ -1,4 +1,4 @@
-import { Menu, Bell, Sun, Moon, ShoppingCart, LogOut } from "lucide-react";
+import { Menu, Bell,ShoppingCart, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth/useAuth";
 
@@ -17,10 +17,17 @@ export default function Navbar({ onMenuClick, cartCount = 0 }: Props) {
 
   const { logout,userName  } = useAuth(); // ✅ use context
 
-  const handleLogout = () => {
-    logout(); // ✅ clears tokens + updates isAuth
-    navigate("/signin", { replace: true });
-  };
+  // const handleLogout = () => {
+  //   logout(); // ✅ clears tokens + updates isAuth
+  //   navigate("/signin", { replace: true });
+  // };
+
+
+  
+  const handleLogout = async () => {
+  await logout(); // ✅ wait for API
+  navigate("/signin", { replace: true });
+};
 
   return (
     <nav className=" sticky top-0 z-20 w-full h-20 bg-[#8e2d26] shadow flex items-center px-4">

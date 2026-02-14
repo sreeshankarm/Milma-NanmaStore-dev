@@ -32,7 +32,7 @@ interface Props {
 export default function ReturnRequestModal({
   show,
   onCancel,
-  onConfirm,
+  // onConfirm,
   orderId,
   deliveryInfo,
   items,

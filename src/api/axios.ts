@@ -2,9 +2,8 @@ import axios from "axios";
 import { token } from "../utils/token";
 
 const api = axios.create({
-//   baseURL: "https://nanmastagingapi.milma.in",
-  baseURL: "/api", 
-
+  //   baseURL: "https://nanmastagingapi.milma.in",
+  baseURL: "/api",
 
   headers: {
     Accept: "application/json",
@@ -14,8 +13,14 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const access = token.getAccess();
+  const env = localStorage.getItem("environment");
+
   if (access) {
     config.headers.Authorization = `Bearer ${access}`;
+  }
+
+  if (env) {
+    config.headers.environment = env;
   }
   return config;
 });
@@ -28,7 +33,7 @@ api.interceptors.response.use(
       window.location.href = "/signin";
     }
     return Promise.reject(err);
-  }
+  },
 );
 
 export default api;

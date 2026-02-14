@@ -1,5 +1,5 @@
 import React from "react";
-import { User, Edit3, Save, ShieldCheck } from "lucide-react";
+import { User, Edit3,  ShieldCheck } from "lucide-react";
 // import type { UserProfile } from "../../typesss/typesss";
 import { useTranslation } from "../../utils/useTranslation";
 import type { UserProfile } from "../../types/profile";

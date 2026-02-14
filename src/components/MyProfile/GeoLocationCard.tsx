@@ -12,7 +12,7 @@ interface GeoLocationCardProps {
 }
 
 const GeoLocationCard: React.FC<GeoLocationCardProps> = ({
-  profile,
+  // profile,
   geoLabel,
   isLocating,
   locationStatus,

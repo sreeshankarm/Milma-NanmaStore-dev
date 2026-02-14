@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect,useRef, useState } from "react";
 // import { useStore } from "../context/store/store";
-import { useTranslation } from "../utils/useTranslation";
+// import { useTranslation } from "../utils/useTranslation";
 // import type {
 //   // ContactDetailsFormState,
 //   // UserProfile,
@@ -23,17 +23,25 @@ export const MyProfileView: React.FC = () => {
   // const profile: UserProfile = getUserProfile();
   // const {  updateProfile, updateGeoLocation } = useStore();
   const { userName } = useAuth();
-  const { profile, loading ,fetchProfile } = useProfile();
+  const { profile, fetchProfile } = useProfile();
 
 
 
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isLocating, setIsLocating] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
-  const [locationStatus, setLocationStatus] = useState("");
+  const [isSaving,
+    //  setIsSaving
+    ] = useState(false);
+  const [isLocating, 
+    // setIsLocating
+  ] = useState(false);
+  const [statusMessage, 
+    // setStatusMessage
+  ] = useState("");
+  const [locationStatus, 
+    // setLocationStatus
+  ] = useState("");
 
   // const [formState, setFormState] = useState<ContactDetailsFormState>({
   //   phone: profile.phone,

@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
+import React from "react";
 import {
-  ArrowDownRight,
-  ArrowUpRight,
+  // ArrowDownRight,
+  // ArrowUpRight,
   Clock,
   History,
   Wallet,
@@ -9,7 +9,9 @@ import {
 import { useStore } from "../context/store/store";
 
 export const MyWalletView: React.FC = () => {
-  const { balance, transactions } = useStore();
+  const { balance,
+    //  transactions 
+    } = useStore();
 
 //   const totals = useMemo(() => {
 //     const credit = transactions

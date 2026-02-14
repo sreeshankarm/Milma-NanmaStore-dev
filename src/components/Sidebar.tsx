@@ -26,7 +26,7 @@ interface Props {
 export default function Sidebar({ open, onClose }: Props) {
   const location = useLocation();
     const { userName } = useAuth();
-    const { profile, loading ,fetchProfile } = useProfile();
+    const { profile, fetchProfile } = useProfile();
 
       useEffect(() => {
         fetchProfile();

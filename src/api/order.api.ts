@@ -41,7 +41,7 @@ export const cancelOrderDetailApi = (payload: {
 
 /* ---------- CANCEL ENTIRE ORDER ---------- */
 export const cancelOrderApi = (payload: {
-  indentdetailgid: number;
+  indentgid: number;
 }) =>
   api.post<ApiSuccess>("/cancelorder", payload);
 

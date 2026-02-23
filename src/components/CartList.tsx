@@ -1,6 +1,11 @@
-// import {  Trash2, Edit3 } from "lucide-react";
+
+
+
+
+// import { Trash2, Edit3 } from "lucide-react";
 // // import type { CartItem } from "../typesss/typesss";
 // import type { CartItem } from "../types/cart";
+// import { useState } from "react";
 
 // interface Props {
 //   // items: CartItem[];
@@ -12,7 +17,7 @@
 //   onIncrease: (item: CartItem) => void;
 //   onDecrease: (item: CartItem) => void;
 //   onRemove: (cartid: number) => void;
-//    onEdit: (item: CartItem) => void;
+//   onEdit: (item: CartItem) => void;
 // }
 
 // export default function CartList({
@@ -20,8 +25,18 @@
 //   // onIncrease,
 //   // onDecrease,
 //   onRemove,
-//   onEdit
+//   onEdit,
 // }: Props) {
+//   const [removingId, setRemovingId] = useState<number | null>(null);
+
+//   const handleRemove = async (cartid: number) => {
+//     setRemovingId(cartid);
+//     try {
+//       await onRemove(cartid);
+//     } finally {
+//       setRemovingId(null);
+//     }
+//   };
 //   return (
 //     <div className="space-y-4">
 //       {items.map((item) => (
@@ -29,11 +44,24 @@
 //           key={item.cartid}
 //           className="bg-white border border-gray-200 rounded-xl shadow p-4 flex items-center gap-4"
 //         >
-//           <img
+//           {/* <img
 //             // src={item.product.image}
 //             // alt={item.product.name}
 //             className="w-16 h-16 object-contain"
-//           />
+//           /> */}
+
+//                <div className="relative">
+//             <img
+//               src={item.imagepath || "/placeholder.png"}
+//               alt={item.productname}
+//               className="w-16 h-16 object-contain"
+//             />
+
+//             {/* 🔥 SMALL BADGE */}
+//             <span className="absolute -top-2 -left-2 bg-gray-600 text-white text-[10px] px-2 py-0.5 rounded-full shadow">
+//               #{item.prod_code}
+//             </span>
+//           </div>
 
 //           <div className="flex-1">
 //             <h3 className="font-semibold">{item.productname}</h3>
@@ -77,12 +105,28 @@
 //               <Edit3 size={18} />
 //             </button>
 
-//             <button
+//             {/* <button
 //               onClick={() => onRemove(item.cartid)}
 //               className="p-2 rounded-lg hover:bg-red-50 text-red-500"
 //               title="Remove item"
 //             >
 //               <Trash2 size={18} />
+//             </button> */}
+
+//             <button
+//               onClick={() => handleRemove(item.cartid)}
+//               disabled={removingId === item.cartid}
+//               className="p-2 rounded-lg hover:bg-red-50 text-red-500 disabled:opacity-60"
+//               title="Remove item"
+//             >
+//               {removingId === item.cartid ? (
+//                 <span
+//                   className="h-4 w-4 border-2 border-red-500 border-t-transparent 
+//                  rounded-full animate-spin block"
+//                 />
+//               ) : (
+//                 <Trash2 size={18} />
+//               )}
 //             </button>
 //           </div>
 //         </div>
@@ -96,10 +140,11 @@
 
 
 
+
 import { Trash2, Edit3 } from "lucide-react";
 // import type { CartItem } from "../typesss/typesss";
 import type { CartItem } from "../types/cart";
-import { useState } from "react";
+// import { useState } from "react";
 
 interface Props {
   // items: CartItem[];
@@ -112,6 +157,7 @@ interface Props {
   onDecrease: (item: CartItem) => void;
   onRemove: (cartid: number) => void;
   onEdit: (item: CartItem) => void;
+  removingId: number | null;
 }
 
 export default function CartList({
@@ -120,16 +166,33 @@ export default function CartList({
   // onDecrease,
   onRemove,
   onEdit,
+  removingId,
 }: Props) {
-  const [removingId, setRemovingId] = useState<number | null>(null);
+  // const [removingId, setRemovingId] = useState<number | null>(null);
 
-  const handleRemove = async (cartid: number) => {
-    setRemovingId(cartid);
-    try {
-      await onRemove(cartid);
-    } finally {
-      setRemovingId(null);
+  // const handleRemove = async (cartid: number) => {
+  //   setRemovingId(cartid);
+  //   try {
+  //     await onRemove(cartid);
+  //   } finally {
+  //     setRemovingId(null);
+  //   }
+  // };
+
+  const getShiftLabel = (shift: number) => {
+    switch (shift) {
+      case 1:
+        return "Morning Shift";
+      case 2:
+        return "Evening Shift";
+      default:
+        return "Unknown Shift";
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB");
   };
   return (
     <div className="space-y-4">
@@ -138,17 +201,44 @@ export default function CartList({
           key={item.cartid}
           className="bg-white border border-gray-200 rounded-xl shadow p-4 flex items-center gap-4"
         >
-          <img
+          {/* <img
             // src={item.product.image}
             // alt={item.product.name}
             className="w-16 h-16 object-contain"
-          />
+          /> */}
+
+          <div className="relative">
+            <img
+              src={item.imagepath || "/placeholder.png"}
+              alt={item.productname}
+              className="w-16 h-16 object-contain"
+            />
+
+            {/* 🔥 SMALL BADGE */}
+            <span className="absolute -top-2 -left-2 bg-gray-600 text-white text-[10px] px-2 py-0.5 rounded-full shadow">
+              #{item.prod_code}
+            </span>
+          </div>
 
           <div className="flex-1">
             <h3 className="font-semibold">{item.productname}</h3>
+            {/* <p className="text-gray-500 text-sm">
+               ₹{item.rate} × {item.quantity}/
+              unit =  ₹ 400 Total
+            </p> */}
             <p className="text-gray-500 text-sm">
-              {/* ₹{item.product.price}  */} ₹{item.rate} × {item.quantity}/
-              unit
+              ₹ {Number(item.rate).toLocaleString()} × {item.quantity} unit =
+              <span className="font-semibold text-gray-500 ml-1">
+                ₹ {(Number(item.rate) * item.quantity).toLocaleString()}
+              </span>
+            </p>
+
+            <p className="text-sm  text-gray-500 mt-1">
+              {getShiftLabel(item.supplyshift)}
+            </p>
+
+            <p className="text-sm text-gray-500">
+              {formatDate(item.supplydate)}
             </p>
           </div>
 
@@ -195,7 +285,8 @@ export default function CartList({
             </button> */}
 
             <button
-              onClick={() => handleRemove(item.cartid)}
+              // onClick={() => handleRemove(item.cartid)}
+              onClick={() => onRemove(item.cartid)}
               disabled={removingId === item.cartid}
               className="p-2 rounded-lg hover:bg-red-50 text-red-500 disabled:opacity-60"
               title="Remove item"

@@ -19,21 +19,44 @@ const CancelOrderdetailModal: React.FC<Props> = ({
 
   if (!open) return null;
 
-  const handleCancelOrder = async () => {
-    try {
-      setLoading(true);
-      await cancelOrderDetailApi({ indentdetailgid });
-      // toast.success("Order item cancelled successfullysss ✅");
-      onSuccess();
-      onClose();
-    } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || "Failed to cancel order item ❌",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const handleCancelOrder = async () => {
+  //   try {
+  //     setLoading(true);
+  //     await cancelOrderDetailApi({ indentdetailgid });
+  //     // toast.success("Order item cancelled successfullysss ✅");
+  //     onSuccess();
+  //     onClose();
+  //   } catch (error: any) {
+  //     toast.error(
+  //       error?.response?.data?.message || "Failed to cancel order item ❌",
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+    const handleCancelOrder = async () => {
+  try {
+    setLoading(true);
+
+    const res = await cancelOrderDetailApi({ indentdetailgid });
+
+    // ✅ Show backend success message
+    toast.success(res.data.success);
+
+    onSuccess();
+    onClose();
+  } catch (error: any) {
+    toast.error(
+      error?.response?.data?.error ||
+        error?.response?.data?.message ||
+        "Failed to cancel order item ❌"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 ">

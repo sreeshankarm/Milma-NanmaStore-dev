@@ -641,6 +641,7 @@ export default function CartView() {
             <div className="flex justify-between text-gray-600">
               <span>Wallet Balance</span>
               {/* <span>₹{balance}</span> */}
+               <span>₹3,500</span>
             </div>
 
             <div className="border-t pt-2">

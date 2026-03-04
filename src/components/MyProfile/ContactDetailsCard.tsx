@@ -72,7 +72,7 @@ const ContactDetailsCard: React.FC<ContactDetailsCardProps> = ({
             }
             className="w-full border border-gray-300 rounded-xl pl-10 pr-3 py-2 text-sm
                        focus:outline-none focus:ring-2 focus:ring-sky-200"
-            rows={3}
+            rows={2}
             placeholder="Address"
           />
         </div>

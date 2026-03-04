@@ -38,6 +38,7 @@ const OrdersListnew: React.FC<Props> = ({ orders, loading }) => {
       </div>
     );
   }
+  const sortedOrders = [...orders].sort((a, b) => b.gid - a.gid);
 
   return (
     <div
@@ -51,7 +52,7 @@ const OrdersListnew: React.FC<Props> = ({ orders, loading }) => {
         gap-4
       "
     >
-      {orders.map((order) => (
+      {sortedOrders.map((order) => (
         <div
           key={order.gid}
           onClick={() => navigate(`/order-details/${order.gid}`)}

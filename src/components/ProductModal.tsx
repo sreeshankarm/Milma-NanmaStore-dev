@@ -7,7 +7,6 @@
 // // import type { Product } from "../types/product";
 // import { getSettingsApi } from "../api/settings.api";
 
-
 // // interface Props {
 // //   product: Product;
 // //   supplyDate: string;
@@ -58,7 +57,6 @@
 //   const supplyShiftValue = shift === "morning" ? 1 : 2;
 //   const [supplyDate, setSupplyDate] = useState(initialDate);
 
-
 //     const [minDate, setMinDate] = useState("");
 //   const [maxDate, setMaxDate] = useState("");
 //   const [shiftText, setShiftText] = useState<Record<string, string>>({});
@@ -86,7 +84,6 @@
 
 //   //   loadSettings();
 //   // }, []);
-
 
 //   useEffect(() => {
 //   const formatDate = (date: Date) =>
@@ -382,10 +379,6 @@
 //     </div>
 //   );
 // }
-
-
-
-
 
 import { X, Sun, Moon, Clock } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -701,8 +694,23 @@ export default function ProductModal({
             </div>
 
             <div className="flex justify-between text-green-700 font-semibold">
-              <span>Total Profit</span>
+              {/* <span>Total Profit</span> */}
+              <span>Expected profit ({qty} pcs)</span>
+
               <span>₹{totalProfit.toFixed(2)}</span>
+            </div>
+
+            <div className="flex justify-between text-gray-600">
+              <span>Wallet balance</span>
+              <span>
+                <span>₹ 2,500</span>
+              </span>
+            </div>
+
+            <div className="flex justify-between text-green-600">
+              <span>New Wallet balance</span>
+
+              <span>₹2,000</span>
             </div>
 
             <hr />

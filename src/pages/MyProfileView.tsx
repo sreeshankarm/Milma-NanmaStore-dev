@@ -15,6 +15,7 @@ import StorePhotosCard from "../components/MyProfile//StorePhotosCard";
 import { useAuth } from "../context/auth/useAuth";
 import { useProfile } from "../context/profile/useProfile";
 import type { ContactDetailsFormState } from "../types/profile";
+import ChangePassword from "./ChangePassword";
 
 
 
@@ -160,7 +161,11 @@ export const MyProfileView: React.FC = () => {
         isSaving={isSaving}
         // onSave={handleSave}
       />
-      <GeoLocationCard
+
+
+            <ChangePassword/>
+
+      {/* <GeoLocationCard
         profile={profile}
         // geoLabel={geoLabel}
         isLocating={isLocating}
@@ -174,7 +179,7 @@ export const MyProfileView: React.FC = () => {
         }
         isEditing={isEditing}
         fileInputRef={fileInputRef}
-      />
+      /> */}
     </div>
   );
 };

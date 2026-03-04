@@ -19,21 +19,44 @@ const CancelEntireOrderModal: React.FC<Props> = ({
 
   if (!open) return null;
 
+  // const handleCancelOrder = async () => {
+  //   try {
+  //     setLoading(true);
+  //     await cancelOrderApi({ indentgid });
+  //     toast.success("Entire order cancelled successfully ✅");
+  //     onSuccess();
+  //     onClose();
+  //   } catch (error: any) {
+  //     toast.error(
+  //       error?.response?.data?.message || "Failed to cancel order ❌"
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
   const handleCancelOrder = async () => {
-    try {
-      setLoading(true);
-      await cancelOrderApi({ indentgid });
-      toast.success("Entire order cancelled successfully ✅");
-      onSuccess();
-      onClose();
-    } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message || "Failed to cancel order ❌"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+
+    const res = await cancelOrderApi({ indentgid });
+
+    // ✅ Use backend message
+    toast.success(res.data.success);
+
+    onSuccess();
+    onClose();
+  } catch (error: any) {
+    toast.error(
+      error?.response?.data?.error ||
+      error?.response?.data?.message ||
+      "Failed to cancel order ❌"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 ">

@@ -378,7 +378,7 @@ export const HomeView: React.FC = () => {
             <ProductCard
               key={p.prod_code}
               product={p}
-              onAdd={() => {}}
+              // onAdd={() => {}}
               onClick={() => setSelected(p)}
             />
           ))}

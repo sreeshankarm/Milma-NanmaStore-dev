@@ -281,7 +281,6 @@ const OrderDetailsView = () => {
           onClose={() => setCancelItem(null)}
           onSuccess={async () => {
             await fetchOrderDetails(Number(gid));
-            toast.success("Order item cancelled successfully");
             setCancelItem(null);
           }}
         />
@@ -320,16 +319,17 @@ const OrderDetailsView = () => {
                 return;
               }
 
-              /* ✅ SUCCESS */
-              toast.success("Order item updated successfully");
+              
+              /* ✅ SUCCESS → show backend message */
+              toast.success(String(data.success));
 
               await fetchOrderDetails(Number(gid));
               setSelectedItem(null);
             } catch (error: any) {
-              toast.error(
+               toast.error(
                 error?.response?.data?.error ||
-                  error?.message ||
-                  "Something went wrong",
+                  error?.response?.data?.message ||
+                  "Unable to update order item ❌",
               );
             }
           }}

@@ -27,7 +27,7 @@ const DistributorDirectory: React.FC = () => {
         {distributors.map((d) => (
           <div
             key={d.id}
-            className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 
+            className="bg-white  border border-gray-200 
                        rounded-2xl p-4 shadow-sm hover:shadow-md transition"
           >
             {/* Top Section */}

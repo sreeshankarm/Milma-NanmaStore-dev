@@ -12,7 +12,7 @@ export default function QuickActions({
   goToReturns,
 }: Props) {
   const itemCls =
-    "bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 p-4 rounded-2xl flex flex-col items-center gap-2 shadow-sm";
+    "bg-white  border border-gray-200  p-4 rounded-2xl flex flex-col items-center gap-2 shadow-sm";
 
   return (
     <div className="grid grid-cols-4 gap-3">

@@ -255,12 +255,12 @@ const OrderDetailsView = () => {
         )}
 
         {/* Back */}
-        <button
+         <button
           onClick={() => navigate("/orders")}
           className="w-full mt-4 flex items-center justify-center gap-2
-             border border-gray-300 text-gray-700
+             bg-white border border-gray-200 text-gray-700
              py-3 rounded-xl font-semibold text-sm
-             hover:bg-gray-100 active:scale-[0.98]
+             hover:bg-gray-50 active:scale-[0.98]
              transition-all duration-200"
         >
           <ArrowLeft size={18} />

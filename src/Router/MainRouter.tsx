@@ -35,7 +35,7 @@ const MainRouter = () => {
     <>
       <Sidebar open={open} onClose={() => setOpen(false)} />
 
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen bg-gray-100">
         <Navbar
           onMenuClick={() => setOpen(true)}
           cartCount={cart.reduce(

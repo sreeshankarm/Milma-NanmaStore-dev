@@ -14,7 +14,7 @@ export default function HeaderCard({
 }: HeaderCardProps) {
   return (
     <>
-      <div className="flex items-center justify-between bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-4 shadow-sm">
+      <div className="flex items-center justify-between bg-white  border border-gray-200  rounded-2xl p-4 shadow-sm">
         <div>
           <p className="text-[11px] uppercase tracking-[0.15em] text-gray-500">
             My orders

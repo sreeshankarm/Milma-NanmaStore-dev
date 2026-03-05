@@ -8,7 +8,7 @@ export default function FeedbackBanner({ onClick }: { onClick: () => void }) {
       w-full
       h-full
       bg-red-500/10
-      border border-red-500/20 dark:border-red-400/20
+      border border-red-500/20 
       rounded-2xl
       px-6 py-5
       flex items-center

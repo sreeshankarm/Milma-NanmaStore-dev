@@ -33,7 +33,7 @@ export default function Navbar({ onMenuClick, cartCount = 0 }: Props) {
     <nav className=" sticky top-0 z-20 w-full h-20 bg-[#8e2d26] shadow flex items-center px-4">
       <button
         onClick={onMenuClick}
-        className="p-2 rounded-lg bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-white border border-gray-200 dark:border-white/10 shadow-sm cursor-pointer hover:bg-gray-200 transition"
+        className="p-2 rounded-lg bg-gray-100  text-gray-700  border border-gray-200  shadow-sm cursor-pointer hover:bg-gray-200 transition"
       >
         <Menu size={16} />
       </button>
@@ -54,7 +54,7 @@ export default function Navbar({ onMenuClick, cartCount = 0 }: Props) {
         <div className="relative">
           <button
             aria-label="Cart"
-            className="p-2 rounded-full bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-white border border-gray-200 dark:border-white/10 cursor-pointer hover:bg-gray-200 transition"
+            className="p-2 rounded-full bg-gray-100  text-gray-700  border border-gray-200  cursor-pointer hover:bg-gray-200 transition"
             onClick={() => navigate("/cart")}
           >
             <ShoppingCart size={20} />
@@ -70,7 +70,7 @@ export default function Navbar({ onMenuClick, cartCount = 0 }: Props) {
 
         <button
           aria-label="Notifications"
-          className="p-2 rounded-full bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-white border border-gray-200 dark:border-white/10 cursor-pointer hover:bg-gray-200 transition"
+          className="p-2 rounded-full bg-gray-100  text-gray-700 border border-gray-200  cursor-pointer hover:bg-gray-200 transition"
         >
           <Bell size={18} />
         </button>
@@ -86,7 +86,7 @@ export default function Navbar({ onMenuClick, cartCount = 0 }: Props) {
           <button
             onClick={handleLogout}
             aria-label="Logout"
-            className="p-2 rounded-full bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-white border border-gray-200 dark:border-white/10 cursor-pointer hover:bg-gray-200 transition"
+            className="p-2 rounded-full bg-gray-100  text-gray-700  border border-gray-200  cursor-pointer hover:bg-gray-200 transition"
           >
             <LogOut size={18} />
           </button>

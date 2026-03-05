@@ -236,7 +236,7 @@ export const MyWalletView: React.FC = () => {
 
           {/* Date Filter */}
 
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-500 p-5">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-300 p-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Start Date */}
               <InputDate
@@ -271,7 +271,7 @@ export const MyWalletView: React.FC = () => {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-2xl border border-gray-500 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-gray-300 shadow-sm overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b">
             <div className="flex items-center gap-2 font-semibold text-gray-700">
               <History size={18} /> Transaction History

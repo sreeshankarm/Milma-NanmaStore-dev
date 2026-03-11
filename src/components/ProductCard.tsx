@@ -73,12 +73,14 @@ interface Props {
   product: Product;
   // onAdd: (p: Product) => void;
   onClick?: () => void;
+  allowAdd: boolean;
 }
 
 export default function ProductCard({
   product,
   // onAdd,
   onClick,
+    allowAdd,
 }: Props) {
   return (
     <div
@@ -127,6 +129,7 @@ export default function ProductCard({
       )} */}
 
         {/* Add Button */}
+        {allowAdd && (
         <button
           //   onClick={(e) => {
           //   e.stopPropagation(); // ⛔ prevents modal open when clicking ADD
@@ -144,9 +147,11 @@ export default function ProductCard({
           "
         >
           <Plus size={18} />
-          Add
+          ADD
         </button>
+           )}
       </div>
     </div>
   );
 }
+

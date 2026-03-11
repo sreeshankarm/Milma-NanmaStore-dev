@@ -49,11 +49,22 @@ export default function AddProductListModal({
   }, [supplyDate]);
 
   // 🔍 Filtered Products
-  const filteredProducts = useMemo(() => {
-    return products.filter((item) =>
-      item.prod_name.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [products, search]);
+  // const filteredProducts = useMemo(() => {
+  //   return products.filter((item) =>
+  //     item.prod_name.toLowerCase().includes(search.toLowerCase())
+  //   );
+  // }, [products, search]);
+
+  const normalize = (text: string) =>
+  text.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const filteredProducts = useMemo(() => {
+  const searchValue = normalize(search);
+
+  return products.filter((item) =>
+    normalize(item.prod_name).includes(searchValue)
+  );
+}, [products, search]);
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-end sm:items-center justify-center">
@@ -181,7 +192,7 @@ export default function AddProductListModal({
                       })
                     }
                     className="
-                      bg-blue-600 
+                      bg-[#0195db] 
                       text-white 
                       text-xs 
                       sm:text-sm

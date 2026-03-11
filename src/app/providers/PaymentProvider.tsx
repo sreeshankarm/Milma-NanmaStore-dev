@@ -1,11 +1,9 @@
-
-
-
-
-
 import { useState } from "react";
 import { PaymentContext } from "../../context/Payment/PaymentContext";
-import { transactionHistoryApi } from "../../api/payment.api";
+import {
+  transactionHistoryApi,
+  getLedgerBalanceApi,
+} from "../../api/payment.api";
 import type { Transaction } from "../../types/payment";
 
 export const PaymentProvider = ({
@@ -15,6 +13,7 @@ export const PaymentProvider = ({
 }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(false);
+  const [balance, setBalance] = useState(0);
 
   const fetchTransactions = async (start: string, end: string) => {
     try {
@@ -34,13 +33,40 @@ export const PaymentProvider = ({
     }
   };
 
-   const clearTransactions = () => {
+  /* ---------- FETCH LEDGER BALANCE ---------- */
+  const fetchBalance = async (start: string, end: string) => {
+    try {
+      setLoading(true);
+
+      const data = await getLedgerBalanceApi({
+        p_sdate: start,
+        p_edate: end,
+      });
+
+      if (data && data.length > 0) {
+        setBalance(Number(data[0].balance ?? 0));
+      }
+    } catch (error) {
+      console.error("Ledger fetch failed", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearTransactions = () => {
     setTransactions([]);
   };
 
   return (
     <PaymentContext.Provider
-      value={{ transactions, loading, fetchTransactions,clearTransactions  }}
+      value={{
+        transactions,
+        loading,
+        fetchTransactions,
+        clearTransactions,
+        balance,
+        fetchBalance,
+      }}
     >
       {children}
     </PaymentContext.Provider>

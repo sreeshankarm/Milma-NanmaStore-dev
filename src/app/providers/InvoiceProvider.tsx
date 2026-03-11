@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { InvoiceContext } from "../../context/invoice/InvoiceContext";
-import { billsApi, invoiceDetailsApi } from "../../api/invoice.api";
-import type { BillItem, InvoiceDetail } from "../../types";
+import {
+  billsApi,
+  invoiceDetailsApi,
+  orderInvoiceStatusApi,
+} from "../../api/invoice.api";
+import type { BillItem, InvoiceDetail, OrderInvoiceStatus } from "../../types";
 
 export const InvoiceProvider = ({
   children,
@@ -10,6 +14,7 @@ export const InvoiceProvider = ({
 }) => {
   const [bills, setBills] = useState<BillItem[]>([]);
   const [invoiceDetails, setInvoiceDetails] = useState<InvoiceDetail[]>([]);
+  const [orderInvoices, setOrderInvoices] = useState<OrderInvoiceStatus[]>([]);
 
   const fetchBills = async (start: string, end: string) => {
     const { data } = await billsApi({
@@ -24,6 +29,16 @@ export const InvoiceProvider = ({
     setInvoiceDetails(data.invoicedetails ?? []);
   };
 
+  const fetchOrderInvoiceStatus = async (order_gid: number) => {
+    const { data } = await orderInvoiceStatusApi(order_gid);
+
+    if (data.status === "success") {
+      setOrderInvoices(data.data ?? []);
+    } else {
+      setOrderInvoices([]);
+    }
+  };
+
   return (
     <InvoiceContext.Provider
       value={{
@@ -31,6 +46,8 @@ export const InvoiceProvider = ({
         invoiceDetails,
         fetchBills,
         fetchInvoiceDetails,
+        orderInvoices,
+        fetchOrderInvoiceStatus,
       }}
     >
       {children}

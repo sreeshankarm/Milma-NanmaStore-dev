@@ -156,13 +156,19 @@
 
 
 
-
 import React, { useEffect, useMemo, useState } from "react";
 import { Clock, History, Wallet } from "lucide-react";
 import { usePayment } from "../context/Payment/usePayment";
 
 export const MyWalletView: React.FC = () => {
-  const { transactions, fetchTransactions, clearTransactions, loading } =usePayment();
+  const {
+    transactions,
+    fetchTransactions,
+    clearTransactions,
+    loading,
+    balance,
+    fetchBalance,
+  } = usePayment();
 
   const today = new Date().toISOString().split("T")[0];
   // const [startDate, setStartDate] = useState("");
@@ -182,12 +188,22 @@ export const MyWalletView: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+
+    fetchBalance(today, today);
+  }, []);
+
+  useEffect(() => {
     return () => {
       clearTransactions();
     };
   }, []);
 
-  const { totalCredit, totalDebit, balance } = useMemo(() => {
+  const {
+    totalCredit,
+    totalDebit,
+    //  balance
+  } = useMemo(() => {
     const credit = transactions
       .filter((t) => t.transactionstatus === "SUCCESS")
       .reduce((a, b) => a + Number(b.paymentamount), 0);
@@ -199,7 +215,7 @@ export const MyWalletView: React.FC = () => {
     return {
       totalCredit: credit,
       totalDebit: debit,
-      balance: credit - debit,
+      // balance: credit - debit,
     };
   }, [transactions]);
 

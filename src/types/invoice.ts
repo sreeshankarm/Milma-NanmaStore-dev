@@ -31,3 +31,23 @@ export interface InvoiceDetail {
   gst_per: number;
   veh_no: string;
 }
+
+
+
+
+
+export interface OrderInvoiceStatus {
+  inv_gid: number;
+  inv_no: number;
+  inv_date: string;
+  prod_code: number;
+  prod_name: string;
+  qty: string;
+  inv_shift: number;
+}
+
+export interface OrderInvoiceStatusResponse {
+  status: string;
+  data?: OrderInvoiceStatus[];
+  msg?: string;
+}

@@ -380,23 +380,24 @@
 //   );
 // }
 
+
+
+
+
+
+
+
+
+
+
+
 import { X, Sun, Moon, Clock } from "lucide-react";
 import { useState, useEffect } from "react";
-// import type { Product } from "../typesss/typesss";
 import { getProductDetailsApi } from "../api/product.api";
-
 import type { ModalProduct, ProductDetail } from "../types/product";
-// import type { Product } from "../types/product";
 import { getSettingsApi } from "../api/settings.api";
-
-// interface Props {
-//   product: Product;
-//   supplyDate: string;
-//     initialQty?: number;
-//   initialShift?: number;
-//   onClose: () => void;
-//   onConfirm: (qty: number,supplyShift: number) => void;
-// }
+import { usePayment } from "../context/Payment/usePayment";
+// import { toast } from "react-toastify";
 
 interface Props {
   product: ModalProduct;
@@ -418,17 +419,10 @@ export default function ProductModal({
   onClose,
   onConfirm,
 }: Props) {
-  // const [loading, setLoading] = useState(false);
-
   const [detailsLoading, setDetailsLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const [details, setDetails] = useState<ProductDetail | null>(null);
-
-  // const [qty, setQty] = useState(1);
-  // const [shift, setShift] = useState<"morning" | "evening">("morning");
-
-  // const supplyShiftValue = shift === "morning" ? 1 : 2;
 
   const [qty, setQty] = useState(initialQty ?? 1);
 
@@ -442,30 +436,6 @@ export default function ProductModal({
   const [minDate, setMinDate] = useState("");
   const [maxDate, setMaxDate] = useState("");
   const [shiftText, setShiftText] = useState<Record<string, string>>({});
-
-  // useEffect(() => {
-  //   const loadSettings = async () => {
-  //     try {
-  //       const data = await getSettingsApi();
-
-  //       const allowedDays = data?.maxallowedsupplydate ?? 7;
-  //       const today = new Date();
-
-  //       const min = new Date(today);
-  //       const max = new Date(today);
-  //       max.setDate(today.getDate() + (allowedDays - 1));
-
-  //       setMinDate(min.toISOString().split("T")[0]);
-  //       setMaxDate(max.toISOString().split("T")[0]);
-
-  //       setShiftText(data.shiftcodetext || {});
-  //     } catch (error) {
-  //       console.error("Settings load failed:", error);
-  //     }
-  //   };
-
-  //   loadSettings();
-  // }, []);
 
   useEffect(() => {
     const formatDate = (date: Date) => date.toLocaleDateString("en-CA"); // gives YYYY-MM-DD safely
@@ -525,11 +495,29 @@ export default function ProductModal({
   const totalProfit = profitPerUnit * qty;
 
   // const today = new Date().toISOString().split("T")[0];
+  const { balance } = usePayment();
+  const totalAmount = Number((price * qty).toFixed(2));
+  const newBalance = balance - totalAmount;
 
   const isChanged =
     qty !== initialQty ||
     supplyShiftValue !== initialShift ||
     supplyDate !== initialDate;
+
+  const handleConfirm = async () => {
+    // if (balance < totalAmount) {
+    //   toast.error("Insufficient wallet balance");
+    //   return;
+    // }
+
+    setSubmitLoading(true);
+
+    try {
+      await onConfirm(qty, supplyShiftValue, supplyDate);
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
 
   return (
     <div className="fixed top-0 left-0 w-screen h-screen bg-black/40  flex justify-center items-center z-50 px-4">
@@ -634,7 +622,7 @@ export default function ProductModal({
         text-center space-y-1 transition
         ${
           shift === "morning"
-            ? "bg-[#3b82f6] text-white shadow-lg"
+            ? "bg-[#0195db] text-white shadow-lg"
             : "bg-white border border-gray-300 text-gray-800 hover:bg-gray-50"
         }
       `}
@@ -655,7 +643,7 @@ export default function ProductModal({
         text-center space-y-1 transition
         ${
           shift === "evening"
-            ? "bg-[#3b82f6] text-white shadow-lg"
+            ? "bg-[#0195db] text-white shadow-lg"
             : "bg-white border border-gray-300 text-gray-800 hover:bg-gray-50"
         }
       `}
@@ -694,23 +682,34 @@ export default function ProductModal({
             </div>
 
             <div className="flex justify-between text-green-700 font-semibold">
-              {/* <span>Total Profit</span> */}
               <span>Expected profit ({qty} pcs)</span>
-
               <span>₹{totalProfit.toFixed(2)}</span>
             </div>
 
-            <div className="flex justify-between text-gray-600">
+            <div className="flex justify-between text-gray-700">
               <span>Wallet balance</span>
-              <span>
-                <span>₹ 2,500</span>
+              <span
+                className={`font-semibold ${
+                  balance < totalAmount ? "text-red-500" : "text-gray-700"
+                }`}
+              >
+                ₹{balance.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
               </span>
             </div>
 
             <div className="flex justify-between text-green-600">
               <span>New Wallet balance</span>
 
-              <span>₹2,000</span>
+              <span
+                className={`font-semibold ${
+                  newBalance < 0 ? "text-red-500" : "text-green-600"
+                }`}
+              >
+                ₹
+                {newBalance.toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                })}
+              </span>
             </div>
 
             <hr />
@@ -724,49 +723,18 @@ export default function ProductModal({
         </div>
 
         {/* Confirm Button */}
-        {/* <button
-          disabled={loading}
-          onClick={() => onConfirm(qty,supplyShiftValue)}
-          className="w-full mt-6 bg-black text-white py-3 rounded-xl text-lg font-semibold hover:bg-[#1e3a8a] transition cursor-pointer"
-        >
-          Confirm & Add
-        </button> */}
-
-        {/* <button
-          disabled={submitLoading}
-          onClick={async () => {
-            setSubmitLoading(true);
-            try {
-              await onConfirm(qty, supplyShiftValue, supplyDate);
-            } finally {
-              setSubmitLoading(false);
-            }
-          }}
-          className={`w-full mt-6 py-3 rounded-xl text-lg font-semibold
-    flex items-center justify-center gap-2 text-white transition
-    ${
-      submitLoading
-        ? "bg-gray-700 cursor-not-allowed"
-        : "bg-black hover:bg-[#1e3a8a]"
-    }
-  `}
-        >
-          {submitLoading && (
-            <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          )}
-          {submitLoading ? "Adding..." : "Confirm & Add"}
-        </button> */}
 
         <button
           disabled={submitLoading || (isEdit && !isChanged)}
-          onClick={async () => {
-            setSubmitLoading(true);
-            try {
-              await onConfirm(qty, supplyShiftValue, supplyDate);
-            } finally {
-              setSubmitLoading(false);
-            }
-          }}
+          // onClick={async () => {
+          //   setSubmitLoading(true);
+          //   try {
+          //     await onConfirm(qty, supplyShiftValue, supplyDate);
+          //   } finally {
+          //     setSubmitLoading(false);
+          //   }
+          // }}
+          onClick={handleConfirm}
           className={`w-full mt-6 py-3 rounded-xl text-lg font-semibold
     flex items-center justify-center gap-2 transition
     ${

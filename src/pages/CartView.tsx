@@ -446,8 +446,6 @@
 
 
 
-
-
 import { useState, useEffect } from "react";
 import {
   // Sun,
@@ -466,6 +464,7 @@ import ProductModal from "../components/ProductModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { usePayment } from "../context/Payment/usePayment";
 
 export default function CartView() {
   const {
@@ -481,6 +480,8 @@ export default function CartView() {
     removingId,
   } = useCart();
 
+  const { balance, fetchBalance } = usePayment();
+
   const [editItem, setEditItem] = useState<CartItem | null>(null);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -488,6 +489,12 @@ export default function CartView() {
 
   useEffect(() => {
     loadCart();
+  }, []);
+
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+
+    fetchBalance(today, today);
   }, []);
 
   const total = cart.reduce(
@@ -498,8 +505,6 @@ export default function CartView() {
 
   // Proper rounding to 2 decimals
   const formattedTotal = Number(total.toFixed(2));
-
- 
 
   /* ---------- CONFIRM ---------- */
   // const handleConfirm = () => {
@@ -533,6 +538,12 @@ export default function CartView() {
       return;
     }
 
+    // ❌ Check wallet balance
+    // if (balance < formattedTotal) {
+    //   toast.error("Insufficient wallet balance");
+    //   return;
+    // }
+
     try {
       setConfirmLoading(true);
       await placeOrder(); // 🔥 toast handled inside provider
@@ -561,8 +572,6 @@ export default function CartView() {
           <p className="text-gray-500 text-lg font-medium">Empty Cart</p>
         </div>
       )}
-
-   
 
       {!cartLoading && cart.length > 0 && (
         <>
@@ -641,7 +650,13 @@ export default function CartView() {
             <div className="flex justify-between text-gray-600">
               <span>Wallet Balance</span>
               {/* <span>₹{balance}</span> */}
-               <span>₹3,500</span>
+              <span>
+                ₹
+                {balance.toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
             </div>
 
             <div className="border-t pt-2">
@@ -667,8 +682,6 @@ export default function CartView() {
               </p>
             </div>
           </div>
-
-         
 
           <button
             onClick={handleConfirm}

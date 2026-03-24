@@ -445,17 +445,8 @@
 
 
 
-
 import { useState, useEffect } from "react";
-import {
-  // Sun,
-  // Moon,
-  // Calendar,
-  // Clock,
-  ChevronRight,
-  ShoppingBag,
-  // CheckCircle,
-} from "lucide-react";
+import { ChevronRight, ShoppingBag } from "lucide-react";
 import CartList from "../components/CartList";
 
 import { useCart } from "../context/cart/useCart";
@@ -554,7 +545,7 @@ export default function CartView() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-5 space-y-6">
+    <div className="max-w-4xl mx-auto p-5 space-y-6">
       <h1 className="text-2xl font-bold">Your Cart</h1>
 
       {/* ------------------ LOADING UI ------------------ */}

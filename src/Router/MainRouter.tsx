@@ -20,6 +20,7 @@ import "react-toastify/dist/ReactToastify.css";
 import type { CartItem } from "../types/cart";
 import { useCart } from "../context/cart/useCart";
 import OrderDetailsView from "../components/orders/OrderDetailsView";
+// import DamagesReturnOrderView from "../components/DamagesReturnOrderView";
 
 const MainRouter = () => {
   const [open, setOpen] = useState(false);
@@ -55,6 +56,7 @@ const MainRouter = () => {
               <Route path="/cart" element={<CartView />} />
               <Route path="/orders" element={<MyOrdersView />} />
               <Route path="/damagesReturn" element={<ReturnRequestsView />} />
+              {/* <Route path="/damagesReturnOrder" element={<DamagesReturnOrderView/>} /> */}
               <Route
                 path="/mydistributors"
                 element={<DistributorDirectory />}

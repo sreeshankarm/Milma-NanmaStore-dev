@@ -2,14 +2,10 @@ import { AlertOctagon } from "lucide-react";
 
 // Define the props interface
 interface HeaderCardProps {
-  returnIntentMessage: string | null; // or undefined if it can be undefined
-  clearReturn: () => void;
   openReturns: () => void;
 }
 
 export default function HeaderCard({
-  returnIntentMessage,
-  clearReturn,
   openReturns,
 }: HeaderCardProps) {
   return (
@@ -32,23 +28,6 @@ export default function HeaderCard({
           <AlertOctagon size={14} /> Return history
         </button>
       </div>
-
-      {returnIntentMessage && (
-        <div className="p-3 border border-amber-200 bg-amber-50 rounded-xl flex items-start gap-3">
-          <div className="p-2 bg-amber-100 rounded-lg text-amber-700">
-            <AlertOctagon size={18} />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-semibold">Select the right order</p>
-            <p className="text-xs">
-              Pick the correct order then tap “Return Items”.
-            </p>
-          </div>
-          <button onClick={clearReturn} className="text-xs font-semibold">
-            Got it
-          </button>
-        </div>
-      )}
     </>
   );
 }

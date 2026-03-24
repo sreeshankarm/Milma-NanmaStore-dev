@@ -1,15 +1,15 @@
 import api from "./axios";
 import type {
-  DateRange,
-  BillItem,
+  // DateRange,
+  // BillItem,
   InvoiceDetail,
   OrderInvoiceStatusResponse,
 } from "../types";
 
 /* ---------- BILLS ---------- */
 
-export const billsApi = (payload: DateRange) =>
-  api.post<BillItem[]>("/bills", payload);
+// export const billsApi = (payload: DateRange) =>
+//   api.post<BillItem[]>("/bills", payload);
 
 /* ---------- INVOICE DETAILS ---------- */
 

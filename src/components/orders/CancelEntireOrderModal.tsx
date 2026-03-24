@@ -43,7 +43,13 @@ const CancelEntireOrderModal: React.FC<Props> = ({
     const res = await cancelOrderApi({ indentgid });
 
     // ✅ Use backend message
-    toast.success(res.data.success);
+    // toast.success(res.data.success);
+     if (res?.data?.error) {
+        toast.error(res.data.error);
+        return;
+      }
+
+      toast.success(res?.data?.success);
 
     onSuccess();
     onClose();

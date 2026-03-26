@@ -407,8 +407,6 @@
 
 
 
-
-
 import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useOrder } from "../../context/order/useOrder";
@@ -469,6 +467,11 @@ const OrderDetailsView = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openInvoiceModal, setOpenInvoiceModal] = useState(false);
   const [loadingInvoiceId, setLoadingInvoiceId] = useState<number | null>(null);
+  const [selectedInvoiceId, setSelectedInvoiceId] = useState<number | null>(
+    null,
+  );
+  const [showInvoiceDropdown, setShowInvoiceDropdown] = useState(false);
+  const [isViewing, setIsViewing] = useState(false);
 
   const navigate = useNavigate();
 
@@ -499,7 +502,7 @@ const OrderDetailsView = () => {
     );
   }
   const hasItems = orderDetails.length > 0;
-
+  const isMultiple = orderInvoices.length > 1;
   return (
     <div className="min-h-screen p-4 sm:p-6">
       <div className=" mx-auto space-y-6">
@@ -673,8 +676,34 @@ const OrderDetailsView = () => {
 
         {/* ✅ TOP ACTION BAR */}
 
+        {/* {invoiceStatus === "success" && (
+  <div className="flex flex-col sm:flex-row gap-3 mb-6">
+    <button
+      onClick={async () => {
+        if (!orderInvoices?.length) return;
 
-        {invoiceStatus === "success" && (
+        try {
+          const firstInvoice = orderInvoices[0];
+          await fetchInvoiceDetails(firstInvoice.inv_gid);
+          setOpenInvoiceModal(true);
+        } catch (error) {
+          console.error("Failed to fetch invoice details", error);
+        }
+      }}
+      disabled={!orderInvoices?.length}
+      className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all duration-200 shadow-md
+        ${
+          orderInvoices?.length
+            ? "bg-[#0195db] text-white hover:bg-blue-500 active:scale-[0.98]"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        }`}
+    >
+      📄 View Invoice
+    </button>
+  </div>
+)} */}
+
+        {/* {invoiceStatus === "success" && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {orderInvoices.map((inv) => {
               const isLoading = loadingInvoiceId === inv.inv_gid;
@@ -687,7 +716,6 @@ const OrderDetailsView = () => {
           hover:shadow-md hover:border-blue-300
           transition-all duration-200 flex flex-col justify-between"
                 >
-                  {/* TOP SECTION */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-start gap-2">
                       <div>
@@ -697,7 +725,6 @@ const OrderDetailsView = () => {
                         </p>
                       </div>
 
-                      {/* STATUS BADGE (optional) */}
                       <span className="text-[10px] sm:text-xs px-2 py-1 rounded-full bg-green-100 text-green-600">
                         Generated
                       </span>
@@ -711,10 +738,8 @@ const OrderDetailsView = () => {
                     </div>
                   </div>
 
-                  {/* DIVIDER */}
                   <div className="my-3 border-t" />
 
-                  {/* ACTION */}
                   <button
                     disabled={isLoading}
                     onClick={async () => {
@@ -748,6 +773,107 @@ const OrderDetailsView = () => {
                 </div>
               );
             })}
+          </div>
+        )} */}
+
+        {invoiceStatus === "success" && (
+          <div className="mb-6 w-full space-y-3">
+            {/* 🔘 MAIN BUTTON */}
+            <button
+              onClick={async () => {
+                // ✅ SINGLE INVOICE
+                if (!isMultiple && orderInvoices.length === 1) {
+                  const inv = orderInvoices[0];
+
+                  setLoadingInvoiceId(inv.inv_gid);
+                  try {
+                    await fetchInvoiceDetails(inv.inv_gid);
+                    setOpenInvoiceModal(true);
+                  } finally {
+                    setLoadingInvoiceId(null);
+                  }
+                }
+
+                // ✅ MULTIPLE
+                if (isMultiple) {
+                  setShowInvoiceDropdown((p) => !p);
+                }
+              }}
+              disabled={
+                !isMultiple && loadingInvoiceId === orderInvoices[0]?.inv_gid
+              }
+              className={`w-full flex items-center justify-center gap-2
+        py-3 rounded-xl font-semibold text-sm
+        transition-all duration-200
+        ${
+          !isMultiple && loadingInvoiceId === orderInvoices[0]?.inv_gid
+            ? "bg-gray-300 text-white cursor-not-allowed"
+            : "bg-[#0195db] text-white hover:bg-blue-500 active:scale-[0.98]"
+        }`}
+            >
+              {/* ✅ LOADER + LABEL */}
+              {!isMultiple && loadingInvoiceId === orderInvoices[0]?.inv_gid ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Loading Invoice...
+                </>
+              ) : (
+                <>📄 {isMultiple ? "Select Invoice" : "View Invoice"}</>
+              )}
+            </button>
+
+            {/* 🔽 MULTIPLE DROPDOWN */}
+            {isMultiple && showInvoiceDropdown && (
+              <div className="w-full bg-white border border-gray-200 rounded-2xl p-4 shadow-sm space-y-4">
+                {/* SELECT */}
+                <select
+                  value={selectedInvoiceId ?? ""}
+                  onChange={(e) => setSelectedInvoiceId(Number(e.target.value))}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm
+            focus:ring-2 focus:ring-[#0195db] outline-none"
+                >
+                  <option value="">Select Invoice</option>
+                  {orderInvoices.map((inv) => (
+                    <option key={inv.inv_gid} value={inv.inv_gid}>
+                      #{inv.inv_no} • {inv.inv_date}
+                    </option>
+                  ))}
+                </select>
+
+                {/* VIEW BUTTON */}
+                <button
+                  disabled={!selectedInvoiceId || isViewing}
+                  onClick={async () => {
+                    if (!selectedInvoiceId) return;
+
+                    setIsViewing(true);
+                    try {
+                      await fetchInvoiceDetails(selectedInvoiceId);
+                      setOpenInvoiceModal(true);
+                      setShowInvoiceDropdown(false);
+                    } finally {
+                      setIsViewing(false); // ✅ ALWAYS RESET
+                    }
+                  }}
+                  className={`w-full py-2.5 rounded-xl text-sm font-semibold
+    flex items-center justify-center gap-2
+    ${
+      selectedInvoiceId
+        ? "bg-emerald-600 text-white"
+        : "bg-gray-200 text-gray-400"
+    }`}
+                >
+                  {isViewing ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Loading Invoice...
+                    </>
+                  ) : (
+                    "View Selected Invoice"
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         )}
 

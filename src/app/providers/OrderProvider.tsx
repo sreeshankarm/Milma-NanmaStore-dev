@@ -76,6 +76,17 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [orderDetails, setOrderDetails] = useState<OrderDetail[]>([]);
   const [loading, setLoading] = useState(false);
 
+
+    // ✅ GLOBAL DATE STATE
+  const today = new Date().toISOString().split("T")[0];
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(today);
+
+  const setDates = (start: string, end: string) => {
+    setStartDate(start);
+    setEndDate(end);
+  };
+
   // const fetchOrders = async (start: string, end: string) => {
   //   const { data } = await getMyOrdersApi({
   //     startdate: start,
@@ -118,7 +129,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <OrderContext.Provider
-      value={{ orders, orderDetails, fetchOrders, fetchOrderDetails, loading }}
+      value={{ orders, orderDetails, fetchOrders, fetchOrderDetails, loading,startDate, endDate, setDates }}
     >
       {children}
     </OrderContext.Provider>

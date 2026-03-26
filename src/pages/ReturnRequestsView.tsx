@@ -281,18 +281,16 @@ import type { InvoiceGroup } from "../types";
 import ReturnRequestModal from "../components/ReturnRequestModal";
 
 export default function ReturnRequestsView() {
-  const { fetchAckList, ackList } = useAck();
+  const { fetchAckList, ackList, startDate, endDate, setDates } = useAck();
   const [selectedInv, setSelectedInv] = useState<InvoiceGroup | null>(null);
 
   const navigate = useNavigate();
 
-  const today = new Date().toISOString().split("T")[0];
+  // const today = new Date().toISOString().split("T")[0];
 
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(today);
+  // const [startDate, setStartDate] = useState(today);
+  // const [endDate, setEndDate] = useState(today);
   const [loading, setLoading] = useState(false);
-
-
 
   const loadReturns = async () => {
     try {
@@ -311,7 +309,27 @@ export default function ReturnRequestsView() {
 
   /* ---------- FILTER ---------- */
 
-  const handleFetch = async () => {
+  // const handleFetch = async () => {
+  //   if (!startDate || !endDate) return;
+
+  //   try {
+  //     setLoading(true);
+  //     await fetchAckList(startDate, endDate);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  /* ---------- LOAD RETURNS ---------- */
+
+  useEffect(() => {
+    loadReturns();
+  }, []);
+
+
+
+
+   const handleFetch = async () => {
     if (!startDate || !endDate) return;
 
     try {
@@ -322,13 +340,9 @@ export default function ReturnRequestsView() {
     }
   };
 
-   /* ---------- LOAD RETURNS ---------- */
-
   useEffect(() => {
-    loadReturns();
+    fetchAckList(startDate, endDate);
   }, []);
-
-  
 
   return (
     <div className="p-5 mx-auto">
@@ -375,15 +389,17 @@ export default function ReturnRequestsView() {
             label="Start Date"
             value={startDate}
             max={endDate}
-            onChange={setStartDate}
+            // onChange={setStartDate}
+             onChange={(val: string) => setDates(val, endDate)}
           />
 
           <InputDate
             label="End Date"
             value={endDate}
             min={startDate}
-            max={today}
-            onChange={setEndDate}
+            // max={today}
+            // onChange={setEndDate}
+            onChange={(val: string) => setDates(startDate, val)}
           />
 
           <div className="sm:col-span-2 mt-3">
@@ -400,7 +416,6 @@ export default function ReturnRequestsView() {
       </div>
 
       {/* RETURN LIST */}
-
 
       <ReturnList
         items={ackList}

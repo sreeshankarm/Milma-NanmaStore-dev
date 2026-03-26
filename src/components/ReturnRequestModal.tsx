@@ -780,11 +780,6 @@
 
 
 
-
-
-
-
-
 import { useEffect, useMemo, useState } from "react";
 import {
   X,
@@ -794,13 +789,14 @@ import {
   CheckSquare,
   Square,
   Package,
-  // Loader2,
+  Loader2,
   PlusCircle,
 } from "lucide-react";
 
 import { useAck } from "../context/ack/useAck";
 import { useProduct } from "../context/product/useProduct";
 import type { InvoiceGroup, SaveAckPayload } from "../types";
+import { toast } from "react-toastify";
 
 interface Props {
   invoice: InvoiceGroup;
@@ -820,13 +816,17 @@ interface ItemState {
 }
 
 export default function ReturnRequestModal({ invoice, onClose }: Props) {
-  const { faultTypes, saveAck } = useAck();
+  const { faultTypes, saveAck, fetchAckList, startDate, endDate } = useAck();
   const { products, fetchProducts } = useProduct();
 
   const [selectedItems, setSelectedItems] = useState<Record<string, ItemState>>(
     {},
   );
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
+
+  // ✅ separate loading states
+  const [loadingData, setLoadingData] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   /* FETCH PRODUCTS */
   useEffect(() => {
@@ -838,26 +838,64 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
 
   /* PRODUCT MAP (SAFE) */
 
+  // const productMap = useMemo(() => {
+  //   const map: Record<number, string> = {};
+  //   products.forEach((p: any) => {
+  //     if (p?.prod_code) map[p.prod_code] = p.imagepath || "";
+  //   });
+  //   return map;
+  // }, [products]);
+
   const productMap = useMemo(() => {
     const map: Record<number, string> = {};
+
     products.forEach((p: any) => {
-      if (p?.prod_code) map[p.prod_code] = p.imagepath || "";
+      if (p?.prod_code && p?.imagepath) {
+        // ✅ FIX: clean URL
+        const cleanUrl = p.imagepath
+          .replace(/\\/g, "")
+          .replace(/\/+/g, "/")
+          .replace("https:/", "https://");
+
+        map[p.prod_code] = cleanUrl;
+      }
     });
+
     return map;
   }, [products]);
 
   /* ITEMS + ACK PARSE */
+  // const items = useMemo(() => {
+  //   return invoice.items.map((i: any) => ({
+  //     id: String(i.invdet_gid),
+  //     name: i.prod_name,
+  //     qty: Number(i.qty),
+  //     basic_amt: Number(i.basic_amt),
+  //     image: productMap[i.prod_code] || "",
+  //     inv_gid: invoice.inv_gid,
+  //     invdet_gid: i.invdet_gid,
+  //     acknowledgements: i.acknowledgements || [],
+  //   }));
+  // }, [invoice, productMap]);
+
   const items = useMemo(() => {
-    return invoice.items.map((i: any) => ({
-      id: String(i.invdet_gid),
-      name: i.prod_name,
-      qty: Number(i.qty),
-      basic_amt: Number(i.basic_amt),
-      image: productMap[i.prod_code] || "",
-      inv_gid: invoice.inv_gid,
-      invdet_gid: i.invdet_gid,
-      acknowledgements: i.acknowledgements || [],
-    }));
+    return invoice.items.map((i: any) => {
+      const fallback = `https://nanmastagingapi.milma.in/products/2005/${i.prod_code}.png`;
+
+      return {
+        id: String(i.invdet_gid),
+        name: i.prod_name,
+        qty: Number(i.qty),
+        basic_amt: Number(i.basic_amt),
+
+        // ✅ MAIN FIX HERE
+        image: productMap[i.prod_code] || fallback,
+
+        inv_gid: invoice.inv_gid,
+        invdet_gid: i.invdet_gid,
+        acknowledgements: i.acknowledgements || [],
+      };
+    });
   }, [invoice, productMap]);
 
   const totalQty = items.reduce((a, b) => a + b.qty, 0);
@@ -898,8 +936,6 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
 
   /* ADD ROW */
 
-
-
   const addRow = (id: string) => {
     const item = items.find((i) => i.id === id);
     if (!item) return;
@@ -925,7 +961,6 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
   };
 
   /* CHANGE QTY */
-
 
   const changeQty = (id: string, index: number, delta: number) => {
     setSelectedItems((prev) => {
@@ -988,9 +1023,39 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
 
   /* SUBMIT */
 
+  // const handleSubmit = async () => {
+  //   try {
+  //     // setLoading(true);
+  //      setSubmitting(true);
+
+  //     const payload: SaveAckPayload = {
+  //       items: Object.entries(selectedItems).map(([id, data]) => {
+  //         const item = items.find((i) => i.id === id)!;
+
+  //         return {
+  //           inv_gid: item.inv_gid,
+  //           invdet_gid: item.invdet_gid,
+  //           remarks: data.remarks,
+  //           faults: faultTypes.map((f: any) => ({
+  //             fault_id: f.id,
+  //             fault_name: f.name,
+  //             qty: data.rows.find((r) => r.faultId === f.id)?.qty ?? 0,
+  //           })),
+  //         };
+  //       }),
+  //     };
+
+  //     await saveAck(payload);
+  //     onClose();
+  //   } finally {
+  //     // setLoading(false);
+  //      setSubmitting(false);
+  //   }
+  // };
+
   const handleSubmit = async () => {
     try {
-      setLoading(true);
+      setSubmitting(true);
 
       const payload: SaveAckPayload = {
         items: Object.entries(selectedItems).map(([id, data]) => {
@@ -1009,10 +1074,37 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
         }),
       };
 
-      await saveAck(payload);
-      onClose();
+      const res = await saveAck(payload);
+
+      /* ✅ SUCCESS */
+
+      if (res.status === "success" && res.saved > 0) {
+        toast.success(res.msg || "Saved successfully");
+
+        // ✅ REFRESH LIST WITH SAME DATE
+        await fetchAckList(startDate, endDate);
+
+        onClose();
+        return;
+      }
+
+      /* ⚠️ VALIDATION ERRORS */
+      if (res.errors?.length) {
+        // Option 1: multiple toast
+        res.errors.forEach((err) => toast.error(err));
+
+        // Option 2 (clean): single toast
+        // toast.error(res.errors.join("\n"));
+
+        return;
+      }
+
+      /* ❌ FALLBACK */
+      toast.error(res.msg || "Failed to save");
+    } catch (error) {
+      toast.error("Server error. Try again.");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -1022,9 +1114,49 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
     Object.keys(selectedItems).length > 0 &&
     Object.values(selectedItems).every((i) => i.remarks.trim().length > 0);
 
+  // useEffect(() => {
+  //   const loadData = async () => {
+  //     try {
+  //       setLoading(true);
+
+  //       const today = new Date().toISOString().split("T")[0];
+
+  //       // ✅ call products API
+  //       await fetchProducts(today);
+
+  //       // (optional) if separate ack API per invoice
+  //       // await fetchAckDetails(invoice.inv_gid);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   loadData();
+  // }, [invoice.inv_gid]);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoadingData(true);
+        const today = new Date().toISOString().split("T")[0];
+        await fetchProducts(today);
+      } finally {
+        setLoadingData(false);
+      }
+    };
+    load();
+  }, [invoice.inv_gid]);
+
   return (
     <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4">
-      <div className="bg-white w-full max-w-2xl h-[92vh] rounded-2xl shadow-xl flex flex-col overflow-hidden">
+      {/* <div className="bg-white w-full max-w-2xl h-[92vh] rounded-2xl shadow-xl flex flex-col overflow-hidden"> */}
+      <div className="relative bg-white w-full max-w-2xl h-[92vh] rounded-2xl shadow-xl flex flex-col overflow-hidden">
+        {/* ✅ LOADER OVERLAY */}
+        {loadingData && (
+          <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/70 ">
+            <div className="h-10 w-10 border-2 border-[#8e2d26] border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
         {/* HEADER */}
         <div className="border-b px-6 py-4 flex justify-between items-center bg-white">
           <div className="flex items-center gap-2 font-semibold text-gray-800">
@@ -1052,7 +1184,7 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
             <div className="flex justify-between text-sm text-gray-600">
               <span>Total Qty: {totalQty}</span>
               <span className="font-semibold text-[#0195db]">
-                Total : ₹{totalAmount}
+                Total : ₹{totalAmount.toFixed(2)}
               </span>
             </div>
 
@@ -1063,7 +1195,7 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
 
           {/* TITLE */}
           <p className="text-sm font-semibold text-gray-700">
-            Select Damaged Items
+            {isViewMode ? "Reported Issues" : "Select Damaged Items"}
           </p>
 
           {/* ITEMS */}
@@ -1084,8 +1216,12 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
                 >
                   {/* ITEM HEADER */}
                   <div
-                    onClick={() => handleSelect(item.id)}
-                    className="flex items-center gap-3 cursor-pointer"
+                    // onClick={() => handleSelect(item.id)}
+                    // className="flex items-center gap-3 cursor-pointer"
+                    onClick={() => !isViewMode && handleSelect(item.id)}
+                    className={`flex items-center gap-3 ${
+                      isViewMode ? "cursor-default" : "cursor-pointer"
+                    }`}
                   >
                     <img
                       src={item.image || "https://via.placeholder.com/80"}
@@ -1101,30 +1237,53 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
                       </p>
                     </div>
 
-                    {!isViewMode && active ? (
+                    {/* {!isViewMode && active ? (
                       <CheckSquare className="text-red-500" size={18} />
                     ) : (
                       <Square className="text-gray-400" size={18} />
-                    )}
+                    )} */}
+                    {!isViewMode &&
+                      (active ? (
+                        <CheckSquare className="text-red-500" size={18} />
+                      ) : (
+                        <Square className="text-gray-400" size={18} />
+                      ))}
                   </div>
 
                   {/* VIEW MODE */}
-                  {isViewMode && item.acknowledgements.length > 0 && (
-                    <div className="mt-3 space-y-2">
-                      {item.acknowledgements.map((ack: any, i: number) => (
-                        <div key={i} className="bg-gray-100 p-2 rounded">
-                          {ack.faults.map((f: any) => (
-                            <div
-                              key={f.fault_id}
-                              className="flex justify-between"
-                            >
-                              <span>{f.fault_name}</span>
-                              <span>Qty: {f.qty}</span>
-                            </div>
-                          ))}
-                          <p className="text-xs text-gray-500">{ack.remarks}</p>
-                        </div>
-                      ))}
+
+                  {isViewMode && (
+                    <div className="mt-3">
+                      {item.acknowledgements.length === 0 ? (
+                        <p className="text-xs text-gray-400 italic">
+                          No issues reported
+                        </p>
+                      ) : (
+                        item.acknowledgements.map((ack: any, i: number) => (
+                          <div key={i} className="bg-gray-100 p-2 rounded mb-2">
+                            {ack.faults.map((f: any) => (
+                              <div
+                                key={f.fault_id}
+                                className="flex justify-between text-sm"
+                              >
+                                <span
+                                  className={
+                                    f.fault_name === "Good"
+                                      ? "text-green-600"
+                                      : "text-red-500"
+                                  }
+                                >
+                                  {f.fault_name}
+                                </span>
+                                <span>Qty: {f.qty}</span>
+                              </div>
+                            ))}
+                            <p className="text-xs text-gray-500 mt-1">
+                              Remark: {ack.remarks}
+                            </p>
+                          </div>
+                        ))
+                      )}
                     </div>
                   )}
 
@@ -1132,7 +1291,6 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
                   {!isViewMode && active && (
                     <div className="mt-4 space-y-3">
                       {rows.map((row, i) => {
-               
                         const totalUsed = getUsedQty(item.id);
                         const remaining = item.qty - totalUsed + row.qty;
 
@@ -1172,7 +1330,6 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
 
                               <span className="px-3 text-sm">{row.qty}</span>
 
-                           
                               <button
                                 disabled={row.qty >= remaining}
                                 onClick={() => changeQty(item.id, i, 1)}
@@ -1233,15 +1390,23 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
         {!isViewMode && (
           <div className="border-t p-4 bg-white">
             <button
-              disabled={!isValid || loading}
+              // disabled={!isValid || loading}
+              disabled={!isValid || submitting}
               onClick={handleSubmit}
-              className={`w-full py-3 rounded-xl text-white font-medium transition ${
-                isValid
-                  ? "bg-black hover:bg-gray-900"
-                  : "bg-gray-300 cursor-not-allowed"
+              // className={`w-full py-3 rounded-xl text-white font-medium transition ${
+              //   isValid
+              //     ? "bg-black hover:bg-gray-900"
+              //     : "bg-gray-300 cursor-not-allowed"
+              // }`}
+
+              className={`w-full py-3 rounded-xl text-sm font-semibold text-white flex justify-center items-center gap-2 ${
+                isValid ? "bg-gray-900 hover:bg-black" : "bg-gray-300"
               }`}
             >
-              {loading ? "Submitting..." : "Submit Return Request"}
+              {/* {loading ? "Submitting..." : "Submit Return Request"} */}
+              {submitting && <Loader2 className="animate-spin" size={18} />}
+              {/* {submitting ? "Submitting..." : "Submit Return Request"} */}
+              Submit Return Request
             </button>
           </div>
         )}
@@ -1249,3 +1414,4 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
     </div>
   );
 }
+

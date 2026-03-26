@@ -85,15 +85,14 @@
 
 
 
-
-
 import React from "react";
-import type { InvoiceGroup } from "../types";
+import type { InvoiceGroup, Acknowledgement } from "../types";
 
 interface Props {
   items: InvoiceGroup[];
   loading: boolean;
   onSelect: (inv: InvoiceGroup) => void;
+  acknowledgements?: Acknowledgement[];
   //   // selectedId?: string; // optional for green highlight
 }
 
@@ -121,31 +120,45 @@ const ReturnList: React.FC<Props> = ({ items, loading, onSelect }) => {
         );
         // const isSelected = selectedId === inv.inv_gid;
 
+        const hasAck = inv.items.some(
+          (item) => (item.acknowledgements?.length ?? 0) > 0,
+        );
+
         return (
           <div
             key={inv.inv_gid}
             onClick={() => onSelect(inv)}
-            className="
-              cursor-pointer
-              bg-white
-              border border-gray-200
-              rounded-2xl
-              shadow-sm
-              hover:shadow-xl
-              hover:-translate-y-1
-              transition-all duration-200
-              
-              flex flex-col
-              h-full
-            "
+            // className="
+            //   cursor-pointer
+            //   bg-white
+            //   border border-gray-200
+            //   rounded-2xl
+            //   shadow-sm
+            //   hover:shadow-xl
+            //   hover:-translate-y-1
+            //   transition-all duration-200
 
-            //               ${
-            //                 "border-gray-200 hover:border-gray-300"
-            //                 // isSelected
-            //                 //   ? "border-emerald-500 ring-1 ring-emerald-200"
-            //                 //   : "border-gray-200 hover:border-gray-300"
-            //               }
-            //             `}
+            //   flex flex-col
+            //   h-full
+            // "
+
+            className={`
+            cursor-pointer
+            bg-white
+            border
+            rounded-2xl
+            shadow-sm
+            hover:shadow-xl
+            hover:-translate-y-1
+            transition-all duration-200
+            flex flex-col h-full
+
+            ${
+              hasAck
+                ? "border-red-400 ring-1 ring-red-200 bg-red-50 "
+                : "border-gray-200 hover:border-gray-300"
+            }
+          `}
           >
             {/* ================= HEADER ================= */}
             <div className="px-5 pt-5 pb-4 flex items-start justify-between">

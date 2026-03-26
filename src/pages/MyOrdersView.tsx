@@ -96,7 +96,6 @@
 
 
 
-
 import { useEffect, useState } from "react";
 import { useOrder } from "../context/order/useOrder";
 import DatePicker from "../components/orders/Datepicker";
@@ -108,11 +107,11 @@ import {
 } from "react-router-dom";
 
 const MyOrdersView: React.FC = () => {
-  const { orders, fetchOrders } = useOrder();
+  const { orders, fetchOrders, startDate, endDate, setDates } = useOrder();
   const navigate = useNavigate();
   // const location = useLocation();
 
-  const today = new Date().toISOString().split("T")[0];
+  // const today = new Date().toISOString().split("T")[0];
 
   // const [startDate, setStartDate] = useState(
   //   location.state?.startDate || today,
@@ -120,8 +119,8 @@ const MyOrdersView: React.FC = () => {
 
   // const [endDate, setEndDate] = useState(location.state?.endDate || today);
 
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(today);
+  // const [startDate, setStartDate] = useState(today);
+  // const [endDate, setEndDate] = useState(today);
   const [loading, setLoading] = useState(false);
   // const [initialLoading, setInitialLoading] = useState(true);
 
@@ -147,6 +146,10 @@ const MyOrdersView: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    loadOrders();
+  }, []);
+
   const handleFetch = async () => {
     if (!startDate || !endDate) return;
 
@@ -159,7 +162,7 @@ const MyOrdersView: React.FC = () => {
   };
 
   useEffect(() => {
-    loadOrders();
+    fetchOrders(startDate, endDate);
   }, []);
 
   // useEffect(() => {
@@ -189,7 +192,8 @@ const MyOrdersView: React.FC = () => {
                 label="Start Date"
                 value={startDate}
                 max={endDate}
-                onChange={setStartDate}
+                // onChange={setStartDate}
+                onChange={(val) => setDates(val, endDate)}
               />
 
               {/* End Date */}
@@ -198,7 +202,8 @@ const MyOrdersView: React.FC = () => {
                 value={endDate}
                 min={startDate}
                 // max={today}
-                onChange={setEndDate}
+                // onChange={setEndDate}
+                onChange={(val) => setDates(startDate, val)}
               />
 
               {/* Button */}

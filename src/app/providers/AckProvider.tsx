@@ -121,20 +121,24 @@
 
 
 
-
-
 import { useState } from "react";
 import { AckContext } from "../../context/ack/AckContext";
 import { ackListApi, saveAckApi } from "../../api/ack.api";
-import type {
-  FaultType,
-  InvoiceGroup,
-  SaveAckPayload,
-} from "../../types";
+import type { FaultType, InvoiceGroup, SaveAckPayload } from "../../types";
 
 export const AckProvider = ({ children }: { children: React.ReactNode }) => {
   const [ackList, setAckList] = useState<InvoiceGroup[]>([]);
   const [faultTypes, setFaultTypes] = useState<FaultType[]>([]);
+
+  // ✅ GLOBAL DATE STATE
+  const today = new Date().toISOString().split("T")[0];
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(today);
+
+  const setDates = (start: string, end: string) => {
+    setStartDate(start);
+    setEndDate(end);
+  };
 
   /* FETCH LIST */
   const fetchAckList = async (start: string, end: string) => {
@@ -168,6 +172,8 @@ export const AckProvider = ({ children }: { children: React.ReactNode }) => {
             qty: Number(item.qty),
             basic_amt: Number(item.basic_amt),
             prod_code: Number(item.prod_code),
+            // ✅ ADD THIS
+            acknowledgements: item.acknowledgements || [],
           })),
         };
       });
@@ -198,6 +204,9 @@ export const AckProvider = ({ children }: { children: React.ReactNode }) => {
         faultTypes,
         fetchAckList,
         saveAck,
+        startDate,
+        endDate,
+        setDates,
       }}
     >
       {children}

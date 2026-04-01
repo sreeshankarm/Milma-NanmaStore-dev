@@ -456,6 +456,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { usePayment } from "../context/Payment/usePayment";
+import { useAuth } from "../context/auth/useAuth";
 
 export default function CartView() {
   const {
@@ -472,6 +473,7 @@ export default function CartView() {
   } = useCart();
 
   const { balance, fetchBalance } = usePayment();
+  const { appAccess } = useAuth();
 
   const [editItem, setEditItem] = useState<CartItem | null>(null);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -574,6 +576,7 @@ export default function CartView() {
             onRemove={(id) => removeFromCart(id)}
             onEdit={(item) => setEditItem(item)}
             removingId={removingId}
+            canEdit={appAccess?.indent === 1}
           />
 
           {/* 🟠 EDIT MODAL */}
@@ -673,7 +676,7 @@ export default function CartView() {
               </p>
             </div>
           </div>
-
+ {appAccess?.indent === 1 && (
           <button
             onClick={handleConfirm}
             disabled={confirmLoading}
@@ -692,6 +695,7 @@ export default function CartView() {
 
             {!confirmLoading && <ChevronRight size={20} />}
           </button>
+            )}
         </>
       )}
     </div>

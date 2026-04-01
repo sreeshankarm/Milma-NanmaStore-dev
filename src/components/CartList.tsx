@@ -158,6 +158,7 @@ interface Props {
   onRemove: (cartid: number) => void;
   onEdit: (item: CartItem) => void;
   removingId: number | null;
+  canEdit: boolean;
 }
 
 export default function CartList({
@@ -167,6 +168,7 @@ export default function CartList({
   onRemove,
   onEdit,
   removingId,
+  canEdit,
 }: Props) {
   // const [removingId, setRemovingId] = useState<number | null>(null);
 
@@ -266,7 +268,7 @@ export default function CartList({
             // onClick={() => onRemove(item.product.id)}
             onClick={() => onRemove(item.cartid)}
           /> */}
-
+{canEdit && (
           <div className="flex items-center gap-1 ml-1">
             <button
               onClick={() => onEdit(item)}
@@ -301,6 +303,7 @@ export default function CartList({
               )}
             </button>
           </div>
+            )}
         </div>
       ))}
     </div>

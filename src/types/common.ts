@@ -1,6 +1,6 @@
 /* ---------- GENERIC API RESPONSE ---------- */
 export interface ApiSuccess {
-  success: string | number;
+  success?: string | number;
   error?: string;
 }
 

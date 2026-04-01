@@ -791,12 +791,16 @@ import {
   Package,
   Loader2,
   PlusCircle,
+  Truck,
+  Calendar,
 } from "lucide-react";
 
 import { useAck } from "../context/ack/useAck";
 import { useProduct } from "../context/product/useProduct";
 import type { InvoiceGroup, SaveAckPayload } from "../types";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/auth/useAuth";
+
 
 interface Props {
   invoice: InvoiceGroup;
@@ -818,6 +822,8 @@ interface ItemState {
 export default function ReturnRequestModal({ invoice, onClose }: Props) {
   const { faultTypes, saveAck, fetchAckList, startDate, endDate } = useAck();
   const { products, fetchProducts } = useProduct();
+  const { appAccess } = useAuth();
+  const canSubmit = appAccess?.indent === 1;
 
   const [selectedItems, setSelectedItems] = useState<Record<string, ItemState>>(
     {},
@@ -1176,19 +1182,39 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
         {/* BODY */}
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5 bg-gray-50 thin-scroll">
           {/* SUMMARY */}
-          <div className="rounded-xl border border-gray-400 bg-white p-4 shadow-sm">
+          <div
+            // className="rounded-xl border border-gray-400 bg-white p-4 shadow-sm"
+            className={`
+    rounded-xl border p-4 shadow-sm
+    ${isViewMode ? "bg-blue-50 border-blue-300" : "bg-white border-gray-300"}
+  `}
+          >
             <p className="font-semibold text-gray-800 mb-2">
-              Invoice #{invoice.inv_no}
+              Invoice: #{invoice.inv_no}
             </p>
 
             <div className="flex justify-between text-sm text-gray-600">
-              <span>Total Qty: {totalQty}</span>
-              <span className="font-semibold text-[#0195db]">
+              <span className="text-xs text-gray-600 italic">
+                Total Qty: {totalQty}
+              </span>
+
+              {/* <span className="font-semibold text-[#0195db]">
                 Total : ₹{totalAmount.toFixed(2)}
+              </span> */}
+              <span className="font-semibold text-[#0195db] flex items-center gap-1">
+                {isViewMode ? (
+                  <>
+                    <Calendar size={14} />
+                    <span>{invoice.inv_date}</span>
+                  </>
+                ) : (
+                  <>Total : ₹{totalAmount.toFixed(2)}</>
+                )}
               </span>
             </div>
 
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-gray-600 italic mt-1 flex items-center gap-1">
+              {isViewMode && <Truck size={14} className="text-gray-600" />}
               Vehicle: {invoice.vehicle_full}
             </p>
           </div>
@@ -1275,7 +1301,9 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
                                 >
                                   {f.fault_name}
                                 </span>
-                                <span>Qty: {f.qty}</span>
+                                <span className="text-xs text-gray-600 italic">
+                                  Qty: {f.qty}
+                                </span>
                               </div>
                             ))}
                             <p className="text-xs text-gray-500 mt-1">
@@ -1387,7 +1415,7 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
 
         {/* FOOTER */}
 
-        {!isViewMode && (
+        {!isViewMode && canSubmit && (
           <div className="border-t p-4 bg-white">
             <button
               // disabled={!isValid || loading}
@@ -1414,4 +1442,3 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
     </div>
   );
 }
-

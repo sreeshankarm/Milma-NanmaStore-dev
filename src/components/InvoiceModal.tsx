@@ -13,8 +13,6 @@ const InvoiceModal = ({ open, onClose }: Props) => {
 
   const invoice = invoiceDetails[0];
 
-
-
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center">
       {/* CARD */}
@@ -42,7 +40,7 @@ const InvoiceModal = ({ open, onClose }: Props) => {
       thin-scroll"
         >
           {/* LOGO */}
-          <div className="flex items-center gap-3 py-3 bg-gray-50 border rounded-lg px-3 mb-3">
+          <div className="flex items-center gap-3 py-3 bg-gray-50 border border-gray-400 rounded-lg px-3 mb-3">
             <img
               src="/nanma.png"
               alt="logo"
@@ -82,12 +80,14 @@ const InvoiceModal = ({ open, onClose }: Props) => {
             {invoiceDetails.map((item) => (
               <div
                 key={item.gid}
-                className="border rounded-xl p-3 bg-gray-50 flex justify-between items-center"
+                className="border border-gray-400 rounded-xl p-3 bg-gray-50 flex justify-between items-center"
               >
                 <div>
                   <p className="font-medium text-gray-800">{item.prod_name}</p>
                   <p className="text-xs text-gray-500">
-                    Qty: {item.qty} × ₹{item.basic_rate}
+                    {/* Qty: {item.qty} × ₹{item.basic_rate} */}
+                    Qty: {Number(item.qty).toFixed(2)} × ₹
+                    {Number(item.basic_rate).toFixed(2)}
                   </p>
                 </div>
 
@@ -102,7 +102,10 @@ const InvoiceModal = ({ open, onClose }: Props) => {
           <div className="flex justify-between font-semibold mb-3">
             <p>Grand Total</p>
             <p className="text-[#0195db]">
-              ₹{invoiceDetails.reduce((sum, i) => sum + Number(i.tot_amt), 0)}
+              ₹
+              {invoiceDetails
+                .reduce((sum, i) => sum + Number(i.tot_amt), 0)
+                .toFixed(2)}
             </p>
           </div>
 

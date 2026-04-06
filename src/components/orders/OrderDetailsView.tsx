@@ -1,8 +1,3 @@
-
-
-
-
-
 // import { useEffect, useState, useMemo } from "react";
 // import { useParams } from "react-router-dom";
 // import { useOrder } from "../../context/order/useOrder";
@@ -659,23 +654,6 @@
 
 // export default OrderDetailsView;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useOrder } from "../../context/order/useOrder";
@@ -696,7 +674,6 @@ import { XCircle, Pencil, Trash2, PlusCircle, ArrowLeft } from "lucide-react";
 import { useInvoice } from "../../context/invoice/useInvoice";
 import InvoiceModal from "../InvoiceModal";
 import { useAuth } from "../../context/auth/useAuth";
-
 
 const OrderDetailsView = () => {
   const { gid } = useParams();
@@ -854,7 +831,8 @@ const OrderDetailsView = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          // <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {orderDetails.map((item) => {
               // const invoice = orderInvoices.find(
               //   (inv) => inv.prod_code === item.prod_code,
@@ -1027,7 +1005,7 @@ const OrderDetailsView = () => {
 
                   {/* Buttons */}
                   <div className="flex gap-2">
-                    {invoiceStatus !== "success" && appAccess?.indent === 1 &&(
+                    {invoiceStatus !== "success" && appAccess?.indent === 1 && (
                       <>
                         {/* Cancel Item */}
                         <button
@@ -1440,4 +1418,3 @@ const OrderDetailsView = () => {
 };
 
 export default OrderDetailsView;
-

@@ -1,0 +1,55 @@
+import { AlertTriangle } from "lucide-react";
+
+interface Props {
+  open: boolean;
+  onClose: () => void;
+  onSave: () => void;
+  latitude?: number;
+  longitude?: number;
+}
+
+const UpdateLocationModal = ({
+  open,
+  onClose,
+  onSave,
+  latitude,
+  longitude,
+}: Props) => {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl w-[90%] max-w-md p-6 space-y-4 shadow-lg">
+
+        <h2 className="text-lg font-semibold">Update Location</h2>
+
+        <div className="text-sm text-gray-600 space-y-1">
+          <p>Current Latitude: {latitude}</p>
+          <p>Current Longitude: {longitude}</p>
+        </div>
+
+        {/* WARNING BOX */}
+        <div className="border border-yellow-400 bg-yellow-50 rounded-lg p-3 flex gap-2 text-sm text-yellow-700">
+          <AlertTriangle size={16} />
+          Make sure you are updating the location while standing near your Milma Store.
+        </div>
+
+        {/* ACTIONS */}
+        <div className="flex justify-end gap-4 pt-2">
+          <button onClick={onClose} className="text-gray-500">
+            Cancel
+          </button>
+
+          <button
+            onClick={onSave}
+            className="px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200"
+          >
+            Save Location
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UpdateLocationModal;

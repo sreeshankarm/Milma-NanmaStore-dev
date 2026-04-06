@@ -11,6 +11,8 @@ const LanguageCard: React.FC = () => {
         <div className="flex items-center gap-2 text-gray-800  font-semibold"><Compass size={16} /> {t("Language preference")}</div>
         <span className="text-xs text-gray-500 ">{languageLabels[language]}</span>
       </div>
+             <div className="border-t pt-3 space-y-2"></div>
+
       <p className="text-sm text-gray-600  mb-3">{t("Choose how the app labels and actions should appear across screens.")}</p>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
         <label htmlFor="language-select" className="text-xs text-gray-500 ">{t("App language")}</label>

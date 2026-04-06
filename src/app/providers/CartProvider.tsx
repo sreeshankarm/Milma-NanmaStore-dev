@@ -517,38 +517,73 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   //   }
   // };
 
-  const placeOrder = async (): Promise<ApiSuccess> => {
-    try {
-      // setLoading(true);
+  // const placeOrder = async (): Promise<ApiSuccess> => {
+  //   try {
+  //     // setLoading(true);
 
+  //     const { data } = await placeOrderApi();
+
+  //     /* ❌ BUSINESS ERROR FROM API */
+  //     if (data.error) {
+  //       toast.error(data.error, { theme: "colored" });
+  //       return data;
+  //     }
+
+  //     /* ✅ SUCCESS */
+  //     toast.success(data.success || "Order placed successfully", {
+  //       theme: "colored",
+  //     });
+
+  //     setCart([]); // ✅ clear cart UI
+
+  //     return data;
+  //   } catch (error) {
+  //     /* ❌ NETWORK / SERVER ERROR */
+  //     toast.error("Failed to place order", { theme: "colored" });
+
+  //     return {
+  //       success: "",
+  //       error: "Failed to place order",
+  //     };
+  //   }
+  //   // finally {
+  //   //   setLoading(false);
+  //   // }
+  // };
+
+
+    const placeOrder = async (): Promise<ApiSuccess> => {
+    try {
       const { data } = await placeOrderApi();
 
-      /* ❌ BUSINESS ERROR FROM API */
-      if (data.error) {
+      /* ❌ BUSINESS ERROR */
+      if (data?.error) {
         toast.error(data.error, { theme: "colored" });
-        return data;
+        return { error: data.error };
       }
+
+      /* ❌ BACKEND EXCEPTION (like maxid error) */
+      // if ((data as any)?.message) {
+      //   toast.error((data as any).message, { theme: "colored" });
+      //   return { error: (data as any).message };
+      // }
 
       /* ✅ SUCCESS */
       toast.success(data.success || "Order placed successfully", {
         theme: "colored",
       });
 
-      setCart([]); // ✅ clear cart UI
+      setCart([]);
 
-      return data;
-    } catch (error) {
+      return { success: data.success || "success" };
+    } catch (error: any) {
       /* ❌ NETWORK / SERVER ERROR */
-      toast.error("Failed to place order", { theme: "colored" });
+      const msg = error?.response?.data?.message || "Failed to place order";
 
-      return {
-        success: "",
-        error: "Failed to place order",
-      };
+      toast.error(msg, { theme: "colored" });
+
+      return { error: msg };
     }
-    // finally {
-    //   setLoading(false);
-    // }
   };
 
   const updateCart = async (

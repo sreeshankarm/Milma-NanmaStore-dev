@@ -391,7 +391,7 @@ import { Lock, Save, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { changePasswordApi } from "../api/auth.api";
+import { changePasswordApi } from "../../api/auth.api";
 
 interface ChangePasswordForm {
   existingpassword: string;
@@ -461,7 +461,7 @@ const ChangePassword: React.FC = () => {
         <Lock size={16} />
         Change Password
       </h3>
-
+<div className="border-t pt-3 space-y-2"></div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Current Password */}
         <div className="space-y-1">

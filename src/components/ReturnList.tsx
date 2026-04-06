@@ -108,7 +108,7 @@ const ReturnList: React.FC<Props> = ({ items, loading, onSelect }) => {
 
   /* ---------- EMPTY ---------- */
   if (!items.length) {
-    return <p className="text-center text-gray-400 py-16">No invoices found</p>;
+    return <p className="text-center text-gray-400 py-16">No return requests found</p>;
   }
 
   return (

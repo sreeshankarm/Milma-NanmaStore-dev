@@ -8,6 +8,8 @@ export interface UserProfile {
   credit_limit: string;
   gst_status?: string;
   state_name: string;
+   latitude?: string;
+  longitude?: string;
 }
 export interface ContactDetailsFormState {
   phone: string;

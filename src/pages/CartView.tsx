@@ -525,12 +525,32 @@ export default function CartView() {
   //   }
   // };
 
+  // const handleConfirm = async () => {
+  //   if (cart.length === 0) {
+  //     toast.error("Cart is empty");
+  //     return;
+  //   }
+
+  //   // ❌ Check wallet balance
+  //   // if (balance < formattedTotal) {
+  //   //   toast.error("Insufficient wallet balance");
+  //   //   return;
+  //   // }
+
+  //   try {
+  //     setConfirmLoading(true);
+  //     await placeOrder(); // 🔥 toast handled inside provider
+  //     navigate("/orders");
+  //   } finally {
+  //     setConfirmLoading(false);
+  //   }
+  // };
+
   const handleConfirm = async () => {
     if (cart.length === 0) {
       toast.error("Cart is empty");
       return;
     }
-
     // ❌ Check wallet balance
     // if (balance < formattedTotal) {
     //   toast.error("Insufficient wallet balance");
@@ -539,7 +559,13 @@ export default function CartView() {
 
     try {
       setConfirmLoading(true);
-      await placeOrder(); // 🔥 toast handled inside provider
+
+      const res = await placeOrder();
+
+      /* ❌ STOP if error */
+      if (res?.error) return;
+
+      /* ✅ ONLY SUCCESS NAVIGATION */
       navigate("/orders");
     } finally {
       setConfirmLoading(false);

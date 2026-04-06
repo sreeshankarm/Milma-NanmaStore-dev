@@ -461,7 +461,7 @@ const ChangePassword: React.FC = () => {
         <Lock size={16} />
         Change Password
       </h3>
-<div className="border-t pt-3 space-y-2"></div>
+<div className="border-t border-gray-300 pt-3 space-y-2"></div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Current Password */}
         <div className="space-y-1">

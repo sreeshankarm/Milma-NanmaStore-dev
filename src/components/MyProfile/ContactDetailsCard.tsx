@@ -22,7 +22,7 @@ const ContactDetailsCard: React.FC<ContactDetailsCardProps> = ({
 }) => (
   <div className="bg-white rounded-2xl border border-gray-300 p-4 space-y-4">
     <h3 className="font-semibold flex items-center gap-2"><Edit3 size={16} />  Contact details</h3>
-               <div className="border-t pt-3 space-y-2"></div>
+               <div className="border-t border-gray-300 pt-3 space-y-2"></div>
 
 
     {isEditing ? (

@@ -228,10 +228,10 @@ export default function CartList({
                ₹{item.rate} × {item.quantity}/
               unit =  ₹ 400 Total
             </p> */}
-            <p className="text-gray-500 text-sm">
-              ₹ {Number(item.rate).toLocaleString()} × {item.quantity} unit =
-              <span className="font-semibold text-gray-500 ml-1">
-                ₹ {(Number(item.rate) * item.quantity).toLocaleString()}
+             <p className="text-gray-600 text-sm">
+                Qty : {item.quantity} nos | Rate : ₹ {Number(item.rate).toLocaleString()} | Total : ₹
+              <span className="font-semibold text-[#0195db] ml-1">
+                 {(Number(item.rate) * item.quantity).toLocaleString()}
               </span>
             </p>
 

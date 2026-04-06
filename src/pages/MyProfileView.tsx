@@ -10,6 +10,8 @@ import type { ContactDetailsFormState } from "../types/profile";
 import ChangePassword from "../components/MyProfile/ChangePassword";
 import GeoLocationCard from "../components/MyProfile/GeoLocationCard";
 import UpdateLocationModal from "../components/MyProfile/UpdateLocationModal";
+import { saveAgentLocationApi } from "../api/profile.api";
+
 import { toast } from "react-toastify";
 
 export const MyProfileView: React.FC = () => {
@@ -55,6 +57,7 @@ export const MyProfileView: React.FC = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [isLocating, setIsLocating] = useState(false);
+
   const [currentLocation, setCurrentLocation] = useState<{
     lat: number;
     lng: number;
@@ -63,28 +66,6 @@ export const MyProfileView: React.FC = () => {
   const handleGeoUpdate = () => {
     setOpenModal(true);
   };
-
-  // const handleSaveLocation = () => {
-  //   setIsLocating(true);
-
-  //   navigator.geolocation.getCurrentPosition(
-  //     (pos) => {
-  //       const lat = pos.coords.latitude;
-  //       const lng = pos.coords.longitude;
-
-  //       console.log("NEW LOCATION:", lat, lng);
-
-  //       // 🔥 CALL API HERE (update location API)
-  //       // await updateLocationApi({ lat, lng });
-
-  //       setIsLocating(false);
-  //       setOpenModal(false);
-  //     },
-  //     () => {
-  //       setIsLocating(false);
-  //     },
-  //   );
-  // };
 
   const handleSaveLocation = () => {
     setIsLocating(true);
@@ -96,29 +77,34 @@ export const MyProfileView: React.FC = () => {
 
         console.log("NEW LOCATION:", lat, lng);
 
-        // ✅ SET LOCAL STATE (THIS FIXES YOUR UI)
+        // ✅ instant UI update
         setCurrentLocation({ lat, lng });
 
         try {
-          // 🔥 CALL API
-          // await updateLocationApi({ lat, lng });
+          const { data } = await saveAgentLocationApi({
+            latitude: lat,
+            longitude: lng,
+          });
 
-          toast.success("Location updated successfully ✅", {
-            theme: "colored",
-          });
-        } catch (err) {
-          toast.error("Failed to update location ❌", {
-            theme: "colored",
-          });
+          if (data?.success === 1) {
+            toast.success(data.message, { theme: "colored" });
+
+            // ✅ refresh profile (sync backend)
+            await fetchProfile();
+          } else {
+            toast.error("Update failed ❌");
+          }
+        } catch (err: any) {
+          toast.error(
+            err?.response?.data?.message || "Something went wrong ❌",
+          );
         }
 
         setIsLocating(false);
         setOpenModal(false);
       },
       () => {
-        toast.error("Unable to fetch location ❌", {
-          theme: "colored",
-        });
+        toast.error("Unable to fetch location ❌");
         setIsLocating(false);
       },
     );
@@ -158,6 +144,7 @@ export const MyProfileView: React.FC = () => {
         onSave={handleSaveLocation}
         latitude={Number(profile?.latitude)}
         longitude={Number(profile?.longitude)}
+        isSaving={isLocating} 
       />
     </div>
   );

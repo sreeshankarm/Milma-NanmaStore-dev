@@ -6,6 +6,7 @@ import { OrderProvider } from "../../app/providers/OrderProvider";
 import { AckProvider } from "../../app/providers/AckProvider";
 import { InvoiceProvider } from "../../app/providers/InvoiceProvider";
 import { PaymentProvider } from "../../app/providers/PaymentProvider";
+import { FeedbackProvider } from "../../app/providers/FeedbackProvider";
 
 export const AppProviders = ({ children }: { children: React.ReactNode }) => (
   <AuthProvider>
@@ -15,7 +16,9 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => (
           <OrderProvider>
             <AckProvider>
               <InvoiceProvider>
-                <PaymentProvider>{children}</PaymentProvider>
+                <PaymentProvider>
+                  <FeedbackProvider>{children}</FeedbackProvider>
+                </PaymentProvider>
               </InvoiceProvider>
             </AckProvider>
           </OrderProvider>
@@ -24,6 +27,7 @@ export const AppProviders = ({ children }: { children: React.ReactNode }) => (
     </ProfileProvider>
   </AuthProvider>
 );
+
 
 
 

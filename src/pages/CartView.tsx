@@ -444,9 +444,8 @@
 
 
 
-
 import { useState, useEffect } from "react";
-import { ChevronRight, ShoppingBag } from "lucide-react";
+import { ChevronRight, ShoppingCart } from "lucide-react";
 import CartList from "../components/CartList";
 
 import { useCart } from "../context/cart/useCart";
@@ -474,7 +473,6 @@ export default function CartView() {
 
   const { balance, fetchBalance } = usePayment();
   const { appAccess } = useAuth();
-
   const [editItem, setEditItem] = useState<CartItem | null>(null);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -500,30 +498,6 @@ export default function CartView() {
   const formattedTotal = Number(total.toFixed(2));
 
   /* ---------- CONFIRM ---------- */
-  // const handleConfirm = () => {
-  //   if (cart.length === 0) return;
-
-  //   // 👉 backend PLACE ORDER api call can go here later
-  //   navigate("/orders");
-  // };
-
-  // const handleConfirm = async () => {
-  //   if (cart.length === 0) {
-  //     toast.error("Cart is empty");
-  //     return;
-  //   }
-
-  //   try {
-  //     setConfirmLoading(true);
-
-  //     await placeOrder(); // 🔥 PLACE ORDER
-  //     // navigate("/orders"); // ✅ success redirect
-  //   } catch {
-  //     // error toast already handled in provider
-  //   } finally {
-  //     setConfirmLoading(false);
-  //   }
-  // };
 
   // const handleConfirm = async () => {
   //   if (cart.length === 0) {
@@ -587,7 +561,7 @@ export default function CartView() {
       {/* ------------------ EMPTY CART UI ------------------ */}
       {!cartLoading && cart.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <ShoppingBag size={60} className="text-gray-400 mb-4" />
+          <ShoppingCart size={60} className="text-gray-400 mb-4" />
           <p className="text-gray-500 text-lg font-medium">Empty Cart</p>
         </div>
       )}
@@ -702,26 +676,26 @@ export default function CartView() {
               </p>
             </div>
           </div>
- {appAccess?.indent === 1 && (
-          <button
-            onClick={handleConfirm}
-            disabled={confirmLoading}
-            className={`w-full bg-[#8e2d26] text-white py-3 rounded-xl text-lg font-semibold
+          {appAccess?.indent === 1 && (
+            <button
+              onClick={handleConfirm}
+              disabled={confirmLoading}
+              className={`w-full bg-[#8e2d26] text-white py-3 rounded-xl text-lg font-semibold
     flex items-center justify-center gap-2 transition
     ${confirmLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#b91c1c]"}
   `}
-          >
-            {confirmLoading && (
-              <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            )}
+            >
+              {confirmLoading && (
+                <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              )}
 
-            <span>
-              {confirmLoading ? "Placing Order..." : "Confirm Indent"}
-            </span>
+              <span>
+                {confirmLoading ? "Placing Order..." : "Submit Order"}
+              </span>
 
-            {!confirmLoading && <ChevronRight size={20} />}
-          </button>
-            )}
+              {!confirmLoading && <ChevronRight size={20} />}
+            </button>
+          )}
         </>
       )}
     </div>

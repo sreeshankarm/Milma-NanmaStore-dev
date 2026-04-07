@@ -654,6 +654,8 @@
 
 // export default OrderDetailsView;
 
+
+
 import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useOrder } from "../../context/order/useOrder";
@@ -1365,6 +1367,7 @@ const OrderDetailsView = () => {
         <ProductModal
           product={selectedNewProduct}
           supplyDate={orderDetails[0]?.supply_date}
+          mode="confirm"
           onClose={() => setSelectedNewProduct(null)}
           onConfirm={async (qty, shift, date) => {
             try {

@@ -174,8 +174,6 @@
 
 
 
-
-
 import React, { useState, useEffect } from "react";
 import WalletCard from "../components/WalletCard";
 import QuickActions from "../components/QuickActions";
@@ -192,16 +190,12 @@ import { TopUpModal } from "../components/TopUpModal";
 import { useProduct } from "../context/product/useProduct";
 import type { Product } from "../types/product";
 import { useCart } from "../context/cart/useCart";
-// import { useProfile } from "../context/profile/useProfile";
 import { getSettingsApi } from "../api/settings.api";
 import { usePayment } from "../context/Payment/usePayment";
 import { useAuth } from "../context/auth/useAuth";
 import ProductSubGroupFilter from "../components/ProductSubGroupFilter";
 
 export const HomeView: React.FC = () => {
-  // const { profile } = useProfile();
-  // const balance = Number(profile?.credit_limit ?? 0);
-
   const { products, loading, fetchProducts, productSubGroups } = useProduct();
   const { balance, fetchBalance } = usePayment();
   const { addToCart } = useCart();
@@ -219,30 +213,15 @@ export const HomeView: React.FC = () => {
 
   const [supplyDate, setSupplyDate] = useState(getToday());
 
-  // const filtered = products.filter((p) =>
-  //   p.prod_name.toLowerCase().includes(searchTerm.toLowerCase()),
-  // );
+  const normalize = (text: string) => text.toLowerCase().replace(/\s+/g, "");
 
-  // const normalize = (text: string) => text.toLowerCase().replace(/\s+/g, "");
+  const filtered = products.filter((p) => {
+    const searchMatch = normalize(p.prod_name).includes(normalize(searchTerm));
 
-  // const filtered = products.filter((p) =>
-  //   normalize(p.prod_name).includes(normalize(searchTerm)),
+    const groupMatch = activeGroup === null || p.subgrp_gid === activeGroup;
 
-  // );
-
-const normalize = (text: string) =>
-  text.toLowerCase().replace(/\s+/g, "");
-
-const filtered = products.filter((p) => {
-  const searchMatch = normalize(p.prod_name).includes(
-    normalize(searchTerm)
-  );
-
-  const groupMatch =
-    activeGroup === null || p.subgrp_gid === activeGroup;
-
-  return searchMatch && groupMatch;
-});
+    return searchMatch && groupMatch;
+  });
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -257,35 +236,6 @@ const filtered = products.filter((p) => {
 
   const [minDate, setMinDate] = useState("");
   const [maxDate, setMaxDate] = useState("");
-
-  // useEffect(() => {
-  //   const loadSettings = async () => {
-  //     try {
-  //       const data = await getSettingsApi();
-
-  //       const allowedDays = data?.maxallowedsupplydate ?? 7;
-
-  //       const today = new Date();
-
-  //       // MIN = Today
-  //       const min = new Date(today);
-
-  //       // MAX = Today + (allowedDays - 1)
-  //       const max = new Date(today);
-  //       max.setDate(today.getDate() + (allowedDays - 1));
-
-  //       setMinDate(min.toISOString().split("T")[0]);
-  //       setMaxDate(max.toISOString().split("T")[0]);
-
-  //       // Default selected date = today
-  //       setSupplyDate(min.toISOString().split("T")[0]);
-  //     } catch (error) {
-  //       console.error("Settings API failed:", error);
-  //     }
-  //   };
-
-  //   loadSettings();
-  // }, []);
 
   useEffect(() => {
     const format = (date: Date) => date.toLocaleDateString("en-CA"); // YYYY-MM-DD (safe)
@@ -323,7 +273,7 @@ const filtered = products.filter((p) => {
         <QuickActions
           repeatLastOrder={() => navigate("/cart")}
           goToReturns={() => navigate("/damagesReturn")}
-          setActiveView={() => {}}
+          // setActiveView={() => {}}
         />
       </div>
       {/* ================= Feedback & Supply Date ================= */}
@@ -350,8 +300,6 @@ const filtered = products.filter((p) => {
         active={activeGroup}
         onSelect={setActiveGroup}
       />
-
-
 
       {/* Product Grid */}
 
@@ -424,11 +372,12 @@ const filtered = products.filter((p) => {
 
               /* ✅ SUCCESS */
 
-              toast.success(
-                supplyShift === 1
-                  ? `🌅 Morning shift  ${qty}  ${res.success}`
-                  : `🌙 Evening shift  ${qty}  ${res.success}`,
-              );
+              // toast.success(
+              //   supplyShift === 1
+              //     ? `🌅 Morning shift  ${qty}  ${res.success}`
+              //     : `🌙 Evening shift  ${qty}  ${res.success}`,
+              // );
+              toast.success("Product successfully added to cart");
 
               setSelected(null);
             } catch (error) {

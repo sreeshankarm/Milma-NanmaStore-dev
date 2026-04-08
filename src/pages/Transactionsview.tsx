@@ -110,7 +110,7 @@ export default function TransactionsView() {
         {loading ? (
           /* ✅ LIST LOADER (CENTER) */
           <div className="flex justify-center items-center py-10">
-            <Loader2 className="animate-spin text-blue-600" size={28} />
+            <Loader2 className="animate-spin text-blue-500" size={28} />
           </div>
         ) : bills.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-gray-500">

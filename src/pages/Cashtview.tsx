@@ -86,7 +86,7 @@ export default function Cashview() {
         {loading ? (
           /* ✅ LOADER */
           <div className="flex justify-center items-center py-10">
-            <Loader2 className="animate-spin text-blue-600" size={28} />
+            <Loader2 className="animate-spin text-blue-500" size={28} />
           </div>
         ) : transactions.length === 0 ? (
           /* ✅ EMPTY STATE */

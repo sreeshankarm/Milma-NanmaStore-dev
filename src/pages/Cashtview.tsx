@@ -103,7 +103,7 @@ export default function Cashview() {
             {transactions.map((item) => (
               <div
                 key={item.paymentorderid}
-                className="flex items-center justify-between bg-gray-50 border border-gray-300 rounded-2xl p-4 shadow-sm"
+                className="flex items-center justify-between bg-white border border-gray-300 rounded-2xl p-4 shadow-sm"
               >
                 {/* LEFT */}
                 <div className="flex items-center gap-4">

@@ -34,8 +34,10 @@ export default function TransactionsView() {
     try {
       setInvoiceLoadingId(gid);
       await printInvoice(gid, date);
-    } catch {
-      toast.error("Invoice download failed");
+    } catch (err: any) {
+      toast.error(
+        err?.message || err?.response?.data?.error || "Invoice download failed",
+      );
     } finally {
       setInvoiceLoadingId(null);
     }
@@ -115,15 +117,14 @@ export default function TransactionsView() {
         ) : bills.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-gray-500">
             <FileText size={40} className="mb-3 text-gray-400" />
-            <p className="text-center">
-              No bills found for selected range
-            </p>
+            <p className="text-center">No bills found for selected range</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {bills.map((bill) => (
+            {bills.map((bill, index) => (
               <div
-                key={bill.gid}
+                // key={bill.gid}
+                 key={`${bill.gid}-${index}`}
                 className="bg-white rounded-2xl shadow-sm border border-gray-300 p-4 hover:shadow-md transition flex flex-col justify-between"
               >
                 {/* TOP */}

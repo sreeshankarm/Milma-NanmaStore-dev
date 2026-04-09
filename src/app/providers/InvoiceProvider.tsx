@@ -302,7 +302,8 @@ export const InvoiceProvider = ({
 
       window.open(fileURL); // ✅ open in new tab
     } catch (error) {
-      console.error("Print Invoice Error", error);
+      // console.error("Print Invoice Error", error);
+      throw error;
     }
   };
 
@@ -316,7 +317,7 @@ export const InvoiceProvider = ({
 
       window.open(fileURL); // ✅ open PDF
     } catch (error: any) {
-      console.error("Print Cash Receipt Error", error);
+      // console.error("Print Cash Receipt Error", error);
       throw error;
     }
   };

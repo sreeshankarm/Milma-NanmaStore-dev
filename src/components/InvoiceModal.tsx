@@ -451,9 +451,10 @@ const InvoiceModal = ({ open, onClose }: Props) => {
 
           {/* PRODUCTS */}
           <div className="space-y-3 pb-4">
-            {invoiceDetails.map((item) => (
+            {invoiceDetails.map((item,index) => (
               <div
-                key={item.gid}
+                // key={item.gid}
+                 key={`${item.gid}-${index}`}
                 className="border border-gray-400 rounded-xl p-3 bg-gray-50 flex justify-between items-center"
               >
                 <div>

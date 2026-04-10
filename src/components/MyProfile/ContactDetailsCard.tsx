@@ -102,7 +102,7 @@ const ContactDetailsCard: React.FC<ContactDetailsCardProps> = ({
           <Mail size={14} /> {profile?.lgin_email ?? "-"}
         </p>
         <p className="flex items-center gap-2">
-          <MapPin size={14} /> {profile?.state_name}
+          <MapPin size={14} /> {profile?.name},{profile?.state_name}
         </p>
       </div>
     )}

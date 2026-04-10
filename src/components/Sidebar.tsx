@@ -274,7 +274,7 @@ export default function Sidebar({ open, onClose }: Props) {
             <p className="text-sm text-gray-600 mt-1">
               {profile?.login_mobile}
             </p>
-            <p className="text-xs text-gray-500">{profile?.state_name}</p>
+            <p className="text-xs text-gray-500">{profile?.name},{profile?.state_name}</p>
           </div>
 
           {/* Close Button */}

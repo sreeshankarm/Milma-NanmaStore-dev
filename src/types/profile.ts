@@ -10,6 +10,7 @@ export interface UserProfile {
   state_name: string;
    latitude?: string;
   longitude?: string;
+   name?: string;
 }
 export interface ContactDetailsFormState {
   phone: string;

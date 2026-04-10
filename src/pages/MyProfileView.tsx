@@ -6,7 +6,7 @@ import ContactDetailsCard from "../components/MyProfile//ContactDetailsCard";
 
 import { useAuth } from "../context/auth/useAuth";
 import { useProfile } from "../context/profile/useProfile";
-import type { ContactDetailsFormState } from "../types/profile";
+// import type { ContactDetailsFormState } from "../types/profile";
 import ChangePassword from "../components/MyProfile/ChangePassword";
 import GeoLocationCard from "../components/MyProfile/GeoLocationCard";
 import UpdateLocationModal from "../components/MyProfile/UpdateLocationModal";
@@ -20,28 +20,28 @@ export const MyProfileView: React.FC = () => {
 
   // const { t } = useTranslation();
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving] = useState(false);
+  // const [isEditing, setIsEditing] = useState(false);
+  // const [isSaving] = useState(false);
 
-  const [statusMessage] = useState("");
+  // const [statusMessage] = useState("");
 
-  const [formState, setFormState] = useState<ContactDetailsFormState>({
-    phone: "",
-    email: "",
-    address: "",
-    storePhotos: [],
-  });
+  // const [formState, setFormState] = useState<ContactDetailsFormState>({
+  //   phone: "",
+  //   email: "",
+  //   address: "",
+  //   storePhotos: [],
+  // });
 
-  useEffect(() => {
-    if (!profile) return;
+  // useEffect(() => {
+  //   if (!profile) return;
 
-    setFormState({
-      phone: profile.login_mobile ?? "",
-      email: profile.lgin_email ?? "",
-      address: profile.state_name ?? "",
-      storePhotos: [],
-    });
-  }, [profile]);
+  //   setFormState({
+  //     phone: profile.login_mobile ?? "",
+  //     email: profile.lgin_email ?? "",
+  //     address: profile.state_name ?? "",
+  //     storePhotos: [],
+  //   });
+  // }, [profile]);
 
   useEffect(() => {
     fetchProfile();
@@ -115,17 +115,17 @@ export const MyProfileView: React.FC = () => {
       <ProfileHeader
         profile={profile}
         userName={userName}
-        isEditing={isEditing}
-        statusMessage={statusMessage}
-        onToggleEdit={() => setIsEditing((p) => !p)}
+        // isEditing={isEditing}
+        // statusMessage={statusMessage}
+        // onToggleEdit={() => setIsEditing((p) => !p)}
       />
       <LanguageCard />
       <ContactDetailsCard
         profile={profile}
-        formState={formState}
-        setFormState={setFormState}
-        isEditing={isEditing}
-        isSaving={isSaving}
+        // formState={formState}
+        // setFormState={setFormState}
+        // isEditing={isEditing}
+        // isSaving={isSaving}
         // onSave={handleSave}
       />
 

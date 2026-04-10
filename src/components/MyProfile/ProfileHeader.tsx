@@ -7,17 +7,17 @@ import type { UserProfile } from "../../types/profile";
 interface Props {
   profile: UserProfile | null;
   userName?: string | null;
-  isEditing: boolean;
-  statusMessage: string;
-  onToggleEdit: () => void;
+  // isEditing: boolean;
+  // statusMessage: string;
+  // onToggleEdit: () => void;
 }
 
 const ProfileHeader: React.FC<Props> = ({
   profile,
   userName,
-  isEditing,
-  statusMessage,
-  onToggleEdit,
+  // isEditing,
+  // statusMessage,
+  // onToggleEdit,
 }) => {
   const { t } = useTranslation();
 
@@ -64,7 +64,7 @@ const ProfileHeader: React.FC<Props> = ({
           "Keep your contact, address, and delivery geolocation up-to-date so your distributor can reach you quickly."
         )}
       </p>
-      <div className="mt-4 flex flex-wrap gap-2">
+      {/* <div className="mt-4 flex flex-wrap gap-2">
         <button
           onClick={onToggleEdit}
           className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold shadow-sm active:scale-[0.99]"
@@ -76,7 +76,7 @@ const ProfileHeader: React.FC<Props> = ({
             {statusMessage}
           </span>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

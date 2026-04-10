@@ -5,29 +5,28 @@ import type { UserProfile, ContactDetailsFormState } from "../../types/profile";
 
 interface ContactDetailsCardProps {
   profile: UserProfile | null;
-  formState: ContactDetailsFormState;
-  setFormState: Dispatch<SetStateAction<ContactDetailsFormState>>;
-  isEditing: boolean;
-  isSaving: boolean;
-  onSave?: () => void;
+  // formState: ContactDetailsFormState;
+  // setFormState: Dispatch<SetStateAction<ContactDetailsFormState>>;
+  // isEditing: boolean;
+  // isSaving: boolean;
+  // onSave?: () => void;
 }
 
 const ContactDetailsCard: React.FC<ContactDetailsCardProps> = ({
   profile,
-  formState,
-  setFormState,
-  isEditing,
-  isSaving,
-  onSave,
+  // formState,
+  // setFormState,
+  // isEditing,
+  // isSaving,
+  // onSave,
 }) => (
   <div className="bg-white rounded-2xl border border-gray-300 p-4 space-y-4">
     <h3 className="font-semibold flex items-center gap-2"><Edit3 size={16} />  Contact details</h3>
                <div className="border-t border-gray-300 pt-3 space-y-2"></div>
 
 
-    {isEditing ? (
+    {/* {isEditing ? (
       <>
-        {/* Phone */}
         <div className="relative">
           <Phone
             size={16}
@@ -44,7 +43,6 @@ const ContactDetailsCard: React.FC<ContactDetailsCardProps> = ({
           />
         </div>
 
-        {/* Email */}
         <div className="relative">
           <Mail
             size={16}
@@ -61,7 +59,6 @@ const ContactDetailsCard: React.FC<ContactDetailsCardProps> = ({
           />
         </div>
 
-        {/* Address */}
         <div className="relative">
           <MapPin
             size={16}
@@ -79,7 +76,6 @@ const ContactDetailsCard: React.FC<ContactDetailsCardProps> = ({
           />
         </div>
 
-        {/* Save Button */}
         <button
           type="button"
           onClick={onSave}
@@ -92,7 +88,7 @@ const ContactDetailsCard: React.FC<ContactDetailsCardProps> = ({
           <span>{isSaving ? "Saving..." : "Save contact info"}</span>
         </button>
       </>
-    ) : (
+    ) : ( */}
       <div className="space-y-3 text-sm">
         <p className="flex items-center gap-2">
           <Phone size={14} /> {profile?.login_mobile}
@@ -105,7 +101,7 @@ const ContactDetailsCard: React.FC<ContactDetailsCardProps> = ({
           <MapPin size={14} /> {profile?.name},{profile?.state_name}
         </p>
       </div>
-    )}
+    {/* )} */}
   </div>
 );
 

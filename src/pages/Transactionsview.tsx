@@ -121,13 +121,12 @@ export default function TransactionsView() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {bills.map((bill, index) => (
+            {/* {bills.map((bill, index) => (
               <div
-                // key={bill.gid}
                  key={`${bill.gid}-${index}`}
                 className="bg-white rounded-2xl shadow-sm border border-gray-300 p-4 hover:shadow-md transition flex flex-col justify-between"
               >
-                {/* TOP */}
+                
                 <div>
                   <div className="flex gap-3">
                     <div className="w-10 h-10 bg-blue-100 flex items-center justify-center rounded-lg">
@@ -144,10 +143,10 @@ export default function TransactionsView() {
                     </div>
                   </div>
 
-                  {/* DIVIDER */}
+                
                   <div className="border-t border-gray-300 my-4"></div>
 
-                  {/* NET AMOUNT (BOTTOM STYLE) */}
+                
                   <div className="flex justify-between items-center bg-gray-50 px-3 py-2 rounded-lg">
                     <p className="text-xs text-gray-500">Net Amount</p>
 
@@ -157,9 +156,9 @@ export default function TransactionsView() {
                   </div>
                 </div>
 
-                {/* BUTTONS */}
+              
                 <div className="grid grid-cols-2 gap-3 mt-4">
-                  {/* INVOICE */}
+                 
                   <button
                     onClick={() =>
                       handleInvoice(String(bill.gid), bill.inv_date)
@@ -175,7 +174,7 @@ export default function TransactionsView() {
                     Invoice
                   </button>
 
-                  {/* RECEIPT */}
+                 
                   <button
                     onClick={() =>
                       handleReceipt(String(bill.gid), bill.inv_date)
@@ -192,7 +191,111 @@ export default function TransactionsView() {
                   </button>
                 </div>
               </div>
-            ))}
+            ))} */}
+
+            {bills.map((bill, index) => {
+              const isLoading =
+                invoiceLoadingId === String(bill.gid) ||
+                receiptLoadingId === String(bill.gid);
+
+              const handleClick = async () => {
+                if (bill.type === "invoice") {
+                  await handleInvoice(String(bill.gid), bill.inv_date);
+                } else if (bill.type === "cash") {
+                  await handleReceipt(String(bill.gid), bill.inv_date);
+                }
+              };
+
+              const isInvoice = bill.type === "invoice";
+
+              return (
+                <div
+                  key={`${bill.gid}-${index}`}
+                  onClick={handleClick}
+                  className={`
+        group bg-white rounded-2xl border border-gray-200 
+        shadow-sm hover:shadow-lg hover:-translate-y-[2px]
+        transition-all duration-200 cursor-pointer
+        p-4 active:scale-[0.98]
+        ${isLoading ? "opacity-70 pointer-events-none" : ""}
+      `}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    {/* LEFT SECTION */}
+                    <div className="flex gap-3">
+                      {/* ICON */}
+                      <div
+                        className={`
+              w-11 h-11 flex items-center justify-center rounded-xl
+              ${isInvoice ? "bg-blue-100" : "bg-green-100"}
+            `}
+                      >
+                        {isInvoice ? (
+                          <FileText className="text-blue-700" size={18} />
+                        ) : (
+                          <Receipt className="text-green-700" size={18} />
+                        )}
+                      </div>
+
+                      {/* TEXT */}
+                      <div className="space-y-1">
+                        {/* INV NO */}
+                        <p className="text-sm font-semibold text-blue-600 group-hover:underline">
+                          {bill.inv_no}
+                        </p>
+
+                        {/* TITLE */}
+                        <p className="text-[15px] font-medium text-gray-900 leading-tight">
+                          {bill.prod_name}
+                        </p>
+
+                        {/* DATE + TYPE */}
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <span>{bill.inv_date}</span>
+
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+
+                          <span
+                            className={`
+                  px-2 py-[2px] rounded-md text-[10px] font-semibold tracking-wide
+                  ${
+                    isInvoice
+                      ? "bg-blue-50 text-blue-700"
+                      : "bg-green-50 text-green-700"
+                  }
+                `}
+                          >
+                            {bill.type.toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* RIGHT SECTION */}
+                    <div className="text-right flex flex-col items-end justify-between h-full">
+                      {isLoading ? (
+                        <Loader2
+                          className="animate-spin text-gray-500"
+                          size={18}
+                        />
+                      ) : (
+                        <p className="text-lg font-semibold text-green-600">
+                          ₹
+                          {Number(bill.net_amt).toLocaleString("en-IN", {
+                            minimumFractionDigits: 2,
+                          })}
+                        </p>
+                      )}
+
+                      {/* subtle arrow */}
+                      <span className="text-xs text-gray-400 group-hover:text-gray-600 mt-2">
+                        →
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

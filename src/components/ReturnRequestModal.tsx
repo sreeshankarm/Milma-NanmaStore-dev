@@ -130,7 +130,6 @@
 // //   navigate("/damagesReturn");
 // // };
 
-
 // //   return (
 // //     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
 // //       <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl flex flex-col max-h-[90vh] overflow-hidden">
@@ -332,13 +331,6 @@
 // //     </div>
 // //   );
 // // }
-
-
-
-
-
-
-
 
 // import { useEffect, useMemo, useState } from "react";
 // import {
@@ -776,10 +768,6 @@
 //   );
 // }
 
-
-
-
-
 import { useEffect, useMemo, useState } from "react";
 import {
   X,
@@ -800,7 +788,6 @@ import { useProduct } from "../context/product/useProduct";
 import type { InvoiceGroup, SaveAckPayload } from "../types";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/auth/useAuth";
-
 
 interface Props {
   invoice: InvoiceGroup;
@@ -1154,9 +1141,11 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
   }, [invoice.inv_gid]);
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4">
+    // <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4">
+    <div className="fixed inset-0 z-50 bg-black/40 flex justify-center items-end sm:items-center">
       {/* <div className="bg-white w-full max-w-2xl h-[92vh] rounded-2xl shadow-xl flex flex-col overflow-hidden"> */}
-      <div className="relative bg-white w-full max-w-2xl h-[92vh] rounded-2xl shadow-xl flex flex-col overflow-hidden">
+      {/* <div className="relative bg-white w-full max-w-2xl h-[92vh] rounded-2xl shadow-xl flex flex-col overflow-hidden"> */}
+      <div className="relative bg-white w-full sm:max-w-2xl h-[95dvh] sm:h-[92vh] rounded-t-3xl sm:rounded-2xl shadow-xl flex flex-col overflow-hidden">
         {/* ✅ LOADER OVERLAY */}
         {loadingData && (
           <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/70 ">
@@ -1208,7 +1197,7 @@ export default function ReturnRequestModal({ invoice, onClose }: Props) {
                     <span>{invoice.inv_date}</span>
                   </>
                 ) : (
-                  <>Total : ₹{totalAmount.toFixed(2)}</>
+                  <>Total : ₹{totalAmount.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</>
                 )}
               </span>
             </div>

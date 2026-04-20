@@ -380,17 +380,6 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
-
-
 // import { X, Sun, Moon, Clock } from "lucide-react";
 // import { useState, useEffect } from "react";
 // import { getProductDetailsApi } from "../api/product.api";
@@ -761,18 +750,6 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
 import { X, Sun, Moon, Clock } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getProductDetailsApi } from "../api/product.api";
@@ -903,8 +880,10 @@ export default function ProductModal({
   };
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen bg-black/40  flex justify-center items-center z-50 px-4">
-      <div className="bg-white w-full max-w-lg rounded-3xl p-6 shadow-xl relative max-h-[90vh]  overflow-y-auto thin-scroll ">
+    // <div className="fixed top-0 left-0 w-screen h-screen bg-black/40  flex justify-center items-center z-50 px-4">
+    <div className="fixed inset-0 z-50  bg-black/40 flex items-end sm:items-center justify-center">
+      {/* <div className="bg-white w-full max-w-lg rounded-3xl p-6 shadow-xl relative max-h-[90vh]  overflow-y-auto thin-scroll "> */}
+      <div className=" bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-xl relative max-h-[90vh] overflow-y-auto thin-scroll">
         {/* ✅ DETAILS LOADER (USES detailsLoading → TS WARNING FIXED) */}
         {detailsLoading && (
           <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-20 rounded-3xl">
@@ -1089,7 +1068,7 @@ export default function ProductModal({
             <div className="flex justify-between font-semibold text-red-600">
               <span>Cost of Items</span>
 
-              <span>₹{total.toFixed(2)}</span>
+              <span>₹{total.toLocaleString("en-IN", { minimumFractionDigits: 2 })}</span>
             </div>
           </div>
         </div>

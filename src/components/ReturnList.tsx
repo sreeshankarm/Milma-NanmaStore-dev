@@ -399,7 +399,7 @@ const ReturnList: React.FC<Props> = ({ items, loading, onSelect }) => {
 
                     {/* PRICE */}
                     <p className="text-sm font-semibold text-emerald-600 text-right min-w-[80px]">
-                      ₹{Number(item.basic_amt).toFixed(2)}
+                      ₹{Number(item.basic_amt).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </p>
                   </div>
                 ))}
@@ -417,7 +417,7 @@ const ReturnList: React.FC<Props> = ({ items, loading, onSelect }) => {
               <div className="text-right">
                 <p className="text-xs text-gray-400 leading-none">Total</p>
                 <p className="text-lg font-bold text-emerald-600 leading-tight">
-                  ₹{total.toFixed(2)}
+                  ₹{total.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                 </p>
               </div>
             </div>

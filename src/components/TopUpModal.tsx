@@ -106,17 +106,6 @@
 //   );
 // };
 
-
-
-
-
-
-
-
-
-
-
-
 // import { X } from "lucide-react";
 // import { useEffect, useState, useCallback } from "react";
 // import { getPaymentFormHtml } from "../api/payment.api";
@@ -232,15 +221,6 @@
 //   );
 // };
 
-
-
-
-
-
-
-
-
-
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getPaymentFormHtml } from "../api/payment.api";
@@ -251,11 +231,7 @@ interface Props {
   balance: number;
 }
 
-export const TopUpModal: React.FC<Props> = ({
-  open,
-  onClose,
-  balance,
-}) => {
+export const TopUpModal: React.FC<Props> = ({ open, onClose, balance }) => {
   const [html, setHtml] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -285,9 +261,10 @@ export const TopUpModal: React.FC<Props> = ({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white w-full max-w-4xl h-[90vh] rounded-xl shadow-xl flex flex-col overflow-hidden">
-
+    // <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-end sm:items-center">
+      {/* <div className="bg-white w-full max-w-4xl h-[90vh] rounded-xl shadow-xl flex flex-col overflow-hidden"> */}
+      <div className="bg-white w-full sm:max-w-4xl h-[95dvh] sm:h-[90vh] rounded-t-2xl sm:rounded-xl shadow-xl flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 bg-[#8e2d26] text-white">
           <h2 className="font-semibold text-lg">Payment</h2>
@@ -298,7 +275,6 @@ export const TopUpModal: React.FC<Props> = ({
 
         {/* Body */}
         <div className="flex-1 relative">
-
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center bg-white">
               <div className="w-8 h-8 border-4 border-[#8e2d26] border-t-transparent rounded-full animate-spin" />

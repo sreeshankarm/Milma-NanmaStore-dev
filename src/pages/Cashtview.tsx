@@ -131,7 +131,7 @@ export default function Cashview() {
                 {/* RIGHT */}
                 <div className="text-right">
                   <p className="text-green-600 font-bold text-lg">
-                    ₹{Number(item.paymentamount).toFixed(2)}
+                    ₹{Number(item.paymentamount).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                   </p>
 
                   <p className="text-xs text-green-600 font-semibold uppercase">

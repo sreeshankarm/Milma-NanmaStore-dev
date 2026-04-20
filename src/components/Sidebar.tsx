@@ -17,7 +17,6 @@
 // import { useProfile } from "../context/profile/useProfile";
 // import  { useEffect } from "react";
 
-
 // interface Props {
 //   open: boolean;
 //   onClose: () => void;
@@ -79,7 +78,7 @@
 
 //       {/* Sidebar */}
 //       <aside
-//         className={`fixed left-0 top-0 w-72 h-full bg-white z-50 shadow-xl 
+//         className={`fixed left-0 top-0 w-72 h-full bg-white z-50 shadow-xl
 //          transform transition-transform duration-300 flex flex-col
 //           ${open ? "translate-x-0" : "-translate-x-72"}`}
 //       >
@@ -120,8 +119,8 @@
 //                 to={item.path}
 //                 key={idx}
 //                 onClick={onClose}
-//                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border 
-//             border-gray-200 
+//                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border
+//             border-gray-200
 //             ${isActive ? "bg-[#eff6ff]" : "text-gray-700"}
 //             hover:bg-[#eff6ff]`}
 //               >
@@ -149,11 +148,6 @@
 //     </>
 //   );
 // }
-
-
-
-
-
 
 import {
   Home,
@@ -200,13 +194,6 @@ export default function Sidebar({ open, onClose }: Props) {
       label: "Damages & Return",
       path: "/damagesReturn",
     },
-    { icon: <User size={18} />, label: "Profile", path: "/profile" },
-
-    {
-      icon: <MessageCircle size={18} />,
-      label: "Feedback & Complaints",
-      path: "/feedbackComplaints",
-    },
 
     {
       icon: <Banknote size={18} />,
@@ -219,6 +206,14 @@ export default function Sidebar({ open, onClose }: Props) {
       label: "Transactions",
       path: "/transactions",
     },
+
+    { icon: <User size={18} />, label: "Profile", path: "/profile" },
+
+    // {
+    //   icon: <MessageCircle size={18} />,
+    //   label: "Feedback & Complaints",
+    //   path: "/feedbackComplaints",
+    // },
 
     // {
     //   icon: <PackageSearch size={18} />,
@@ -274,7 +269,9 @@ export default function Sidebar({ open, onClose }: Props) {
             <p className="text-sm text-gray-600 mt-1">
               {profile?.login_mobile}
             </p>
-            <p className="text-xs text-gray-500">{profile?.name},{profile?.state_name}</p>
+            <p className="text-xs text-gray-500">
+              {profile?.name},{profile?.state_name}
+            </p>
           </div>
 
           {/* Close Button */}

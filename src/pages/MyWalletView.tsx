@@ -659,7 +659,7 @@ export const MyWalletView: React.FC = () => {
 
                 <h1 className="text-3xl sm:text-4xl font-bold flex items-center gap-3 mt-2">
                   <Wallet size={26} />₹
-                  {Number(balance).toLocaleString(undefined, {
+                  {Number(balance).toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                   })}
                 </h1>
@@ -672,8 +672,8 @@ export const MyWalletView: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Stat title="Total Credit" value={totalCredit} />
-                <Stat title="Total Debit" value={totalDebit} />
+                <Stat title="Total Credit" value={Number(totalCredit).toLocaleString("en-IN", { minimumFractionDigits: 2 })} />
+                <Stat title="Total Debit" value={Number(totalDebit).toLocaleString("en-IN", { minimumFractionDigits: 2 })} />
               </div>
             </div>
           </div>
@@ -872,13 +872,13 @@ export const MyWalletView: React.FC = () => {
 
                         <td className="px-6 py-4 text-right font-semibold text-emerald-600">
                           {Number(item.cr) > 0
-                            ? `₹${Number(item.cr).toFixed(2)}`
+                            ? `₹${Number(item.cr).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`
                             : "-"}
                         </td>
 
                         <td className="px-6 py-4 text-right font-semibold text-red-500">
                           {Number(item.dr) > 0
-                            ? `₹${Number(item.dr).toFixed(2)}`
+                            ? `₹${Number(item.dr).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`
                             : "-"}
                         </td>
 
@@ -889,7 +889,7 @@ export const MyWalletView: React.FC = () => {
                               : "text-gray-800"
                           }`}
                         >
-                          ₹{Number(item.balance).toFixed(2)}
+                          ₹{Number(item.balance).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                         </td>
                       </tr>
                     ))}

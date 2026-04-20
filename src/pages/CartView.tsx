@@ -547,8 +547,8 @@ export default function CartView() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-5 space-y-6">
-      <h1 className="text-2xl font-bold">Your Cart</h1>
+    <div className="max-w-4xl mx-auto p-5 ">
+      <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
 
       {/* ------------------ LOADING UI ------------------ */}
       {cartLoading && (
@@ -628,7 +628,7 @@ export default function CartView() {
           )}
 
           {/* Totals */}
-          <div className="bg-white border border-gray-200 rounded-xl shadow p-4 space-y-2">
+          <div className="bg-white border border-gray-200  shadow p-4 space-y-2 mt-6">
             <div className="flex justify-between text-gray-600">
               <span>Item Total</span>
               {/* <span>₹{total}</span> */}
@@ -680,7 +680,7 @@ export default function CartView() {
             <button
               onClick={handleConfirm}
               disabled={confirmLoading}
-              className={`w-full bg-[#8e2d26] text-white py-3 rounded-xl text-lg font-semibold
+              className={`w-full bg-[#8e2d26] text-white py-3  text-lg font-semibold
     flex items-center justify-center gap-2 transition
     ${confirmLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#b91c1c]"}
   `}

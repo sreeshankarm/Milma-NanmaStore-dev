@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import ProfileHeader from "../components/MyProfile/ProfileHeader";
-import LanguageCard from "../components/MyProfile/LanguageCard";
+// import LanguageCard from "../components/MyProfile/LanguageCard";
 import ContactDetailsCard from "../components/MyProfile//ContactDetailsCard";
 
 import { useAuth } from "../context/auth/useAuth";
@@ -119,7 +119,14 @@ export const MyProfileView: React.FC = () => {
         // statusMessage={statusMessage}
         // onToggleEdit={() => setIsEditing((p) => !p)}
       />
-      <LanguageCard />
+      {/* <LanguageCard /> */}
+
+         <GeoLocationCard
+        profile={profile}
+        isLocating={isLocating}
+        onUpdate={handleGeoUpdate}
+        currentLocation={currentLocation}
+      />
       <ContactDetailsCard
         profile={profile}
         // formState={formState}
@@ -131,12 +138,7 @@ export const MyProfileView: React.FC = () => {
 
       <ChangePassword />
 
-      <GeoLocationCard
-        profile={profile}
-        isLocating={isLocating}
-        onUpdate={handleGeoUpdate}
-        currentLocation={currentLocation}
-      />
+   
 
       <UpdateLocationModal
         open={openModal}

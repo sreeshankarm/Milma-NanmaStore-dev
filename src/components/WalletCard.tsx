@@ -36,7 +36,7 @@ export default function WalletCard({ balance, onTopUp, allowTopUp }: Props) {
             balance < 0 ? "text-red-300" : "text-white"
           }`}
         >
-          ₹{balance.toLocaleString()}
+          ₹{Number(balance).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
         </h2>
 
         {/* Tap to Top Up */}

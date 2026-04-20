@@ -349,7 +349,7 @@ const OrdersListnew: React.FC<Props> = ({ orders, loading }) => {
           {/* Right Section */}
           <div className="flex items-center gap-2">
             <p className="text-lg font-semibold text-emerald-600">
-              ₹{Number(order.ordertotal).toFixed(2)}
+              ₹{Number(order.ordertotal).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
             </p>
 
             <ChevronRight size={25} className="text-gray-400" />

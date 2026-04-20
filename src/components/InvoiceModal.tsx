@@ -466,7 +466,7 @@ const InvoiceModal = ({ open, onClose }: Props) => {
                   </p>
                 </div>
 
-                <p className="font-semibold text-[#0195db]">₹{item.tot_amt}</p>
+                <p className="font-semibold text-[#0195db]">₹{Number(item.tot_amt).toLocaleString("en-IN", { minimumFractionDigits: 2 })}</p>
               </div>
             ))}
           </div>
@@ -481,7 +481,7 @@ const InvoiceModal = ({ open, onClose }: Props) => {
               ₹
               {invoiceDetails
                 .reduce((sum, i) => sum + Number(i.tot_amt), 0)
-                .toFixed(2)}
+                .toLocaleString("en-IN", { minimumFractionDigits: 2 })}
             </p>
           </div>
 

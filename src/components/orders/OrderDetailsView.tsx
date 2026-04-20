@@ -998,10 +998,10 @@ const OrderDetailsView = () => {
                   {/* Price */}
                   <div className="flex justify-between text-sm">
                     <p className="text-gray-500">
-                      Rate: ₹{Number(item.rate).toFixed(2)}
+                      Rate: ₹{Number(item.rate).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </p>
                     <p className="font-semibold text-[#0195db]">
-                      Total: ₹{Number(item.total).toFixed(2)}
+                      Total: ₹{Number(item.total).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                     </p>
                   </div>
 
